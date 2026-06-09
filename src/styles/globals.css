@@ -1,0 +1,188 @@
+/* font */
+@import "tailwindcss";
+/* @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap"); */
+
+:root {
+  --background: oklch(100% 0 0);
+  --foreground: oklch(14.5% 0 0);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(14.5% 0 0);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(14.5% 0 0);
+  --primary: oklch(14.5% 0 0);
+  --primary-foreground: oklch(98.5% 0 0);
+  --secondary: oklch(97% 0 0);
+  --secondary-foreground: oklch(20.5% 0 0);
+  --muted: oklch(97% 0 0);
+  --muted-foreground: oklch(55.6% 0 0);
+  --accent: oklch(97% 0 0);
+  --accent-foreground: oklch(20.5% 0 0);
+  --color-fd-accent: oklch(97% 0 0);
+  --color-fd-accent-foreground: oklch(20.5% 0 0);
+  --destructive: oklch(57.7% .245 27.325);
+  --destructive-foreground: #fafafa;
+  --border: oklch(92.2% 0 0);
+  --input: oklch(92.2% 0 0);
+  --ring: oklch(70.8% 0 0);
+  --chart-1: oklch(64.6% .222 41.116);
+  --chart-2: oklch(60% .118 184.704);
+  --chart-3: oklch(39.8% .07 227.392);
+  --chart-4: oklch(82.8% .189 84.429);
+  --chart-5: oklch(76.9% .188 70.08);
+  --radius: .625rem;
+  --sidebar: oklch(98.5% 0 0);
+  --sidebar-foreground: oklch(14.5% 0 0);
+  --sidebar-primary: oklch(20.5% 0 0);
+  --sidebar-primary-foreground: oklch(98.5% 0 0);
+  --sidebar-accent: oklch(92.2% 0 0);
+  --sidebar-accent-foreground: oklch(20.5% 0 0);
+  --sidebar-border: oklch(92.2% 0 0);
+  --sidebar-ring: oklch(70.8% 0 0);
+  --color-fd-primary: oklch(0% 0 0);
+  --brand-accent: var(--accent);
+  --brand-accent-foreground: var(--accent-foreground);
+  --app-background: var(--background);
+  --app-surface: var(--card);
+  --app-foreground: var(--foreground);
+  --app-muted: var(--muted-foreground);
+  --app-border: var(--border);
+  --app-accent: var(--brand-accent);
+  --app-accent-foreground: var(--brand-accent-foreground);
+  --app-radius: var(--radius);
+  --page-background:
+    radial-gradient(
+      circle at top left,
+      rgba(59, 130, 246, 0.16),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(168, 85, 247, 0.12),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(241, 245, 249, 0.94)
+    );
+  color-scheme: light;
+}
+
+.dark {
+  --background: oklch(14.5% 0 0);
+  --foreground: oklch(98.5% 0 0);
+  --card: oklch(20.5% 0 0);
+  --card-foreground: oklch(98.5% 0 0);
+  --popover: oklch(20.5% 0 0);
+  --popover-foreground: oklch(98.5% 0 0);
+  --primary: oklch(98.5% 0 0);
+  --primary-foreground: oklch(14.5% 0 0);
+  --secondary: oklch(26.9% 0 0);
+  --secondary-foreground: oklch(98.5% 0 0);
+  --muted: oklch(26.9% 0 0);
+  --muted-foreground: oklch(70.8% 0 0);
+  --accent: oklch(26.9% 0 0);
+  --accent-foreground: oklch(98.5% 0 0);
+  --color-fd-accent: oklch(26.9% 0 0);
+  --color-fd-accent-foreground: oklch(98.5% 0 0);
+  --destructive: oklch(70.4% .191 22.216);
+  --destructive-foreground: #fafafa;
+  --border: oklch(100% 0 0 / .1);
+  --input: oklch(100% 0 0 / .15);
+  --ring: oklch(55.6% 0 0);
+  --chart-1: oklch(48.8% .243 264.376);
+  --chart-2: oklch(69.6% .17 162.48);
+  --chart-3: oklch(76.9% .188 70.08);
+  --chart-4: oklch(62.7% .265 303.9);
+  --chart-5: oklch(64.5% .246 16.439);
+  --sidebar: oklch(20.5% 0 0);
+  --sidebar-foreground: oklch(98.5% 0 0);
+  --sidebar-primary: oklch(48.8% .243 264.376);
+  --sidebar-primary-foreground: oklch(98.5% 0 0);
+  --sidebar-accent: oklch(26.9% 0 0);
+  --sidebar-accent-foreground: oklch(98.5% 0 0);
+  --sidebar-border: oklch(100% 0 0 / .1);
+  --sidebar-ring: oklch(55.6% 0 0);
+  --color-fd-primary: oklch(100% 0 0);
+  --brand-accent: var(--accent);
+  --brand-accent-foreground: var(--accent-foreground);
+  --app-background: var(--background);
+  --app-surface: var(--card);
+  --app-foreground: var(--foreground);
+  --app-muted: var(--muted-foreground);
+  --app-border: var(--border);
+  --app-accent: var(--brand-accent);
+  --app-accent-foreground: var(--brand-accent-foreground);
+  --app-radius: var(--radius);
+  --page-background:
+    radial-gradient(
+      circle at top left,
+      rgba(59, 130, 246, 0.2),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(99, 102, 241, 0.15),
+      transparent 26%
+    ),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.92), rgba(15, 23, 42, 0.98));
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-clock:
+    "Monomaniac One", "Elms Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--card);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--brand-accent);
+  --color-accent-foreground: var(--brand-accent-foreground);
+  --radius-theme: var(--radius);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  background-color: var(--background);
+  background-image: var(--page-background);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--foreground);
+  background-size: cover;
+  background-position: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--brand-accent) 22%, transparent);
+  color: var(--foreground);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in oklab, var(--muted-foreground) 80%, transparent);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/*
+  Component-level styling should use Tailwind utility classes directly in JSX.
+  Global CSS is intentionally minimal: CSS variables, root selectors and
+  base font/background so Tailwind utilities can compose UI styles.
+*/

@@ -1,0 +1,101 @@
+export function themeToCssVars(theme) {
+  const isDark = theme?.mode === "dark";
+
+  const palette = isDark
+    ? {
+        "--background": "oklch(14.5% 0 0)",
+        "--foreground": "oklch(98.5% 0 0)",
+        "--card": "oklch(20.5% 0 0)",
+        "--card-foreground": "oklch(98.5% 0 0)",
+        "--popover": "oklch(20.5% 0 0)",
+        "--popover-foreground": "oklch(98.5% 0 0)",
+        "--primary": "oklch(98.5% 0 0)",
+        "--primary-foreground": "oklch(14.5% 0 0)",
+        "--secondary": "oklch(26.9% 0 0)",
+        "--secondary-foreground": "oklch(98.5% 0 0)",
+        "--muted": "oklch(26.9% 0 0)",
+        "--muted-foreground": "oklch(70.8% 0 0)",
+        "--accent": "oklch(26.9% 0 0)",
+        "--accent-foreground": "oklch(98.5% 0 0)",
+        "--color-fd-accent": "oklch(26.9% 0 0)",
+        "--color-fd-accent-foreground": "oklch(98.5% 0 0)",
+        "--destructive": "oklch(70.4% .191 22.216)",
+        "--destructive-foreground": "#fafafa",
+        "--border": "oklch(100% 0 0 / .1)",
+        "--input": "oklch(100% 0 0 / .15)",
+        "--ring": "oklch(55.6% 0 0)",
+        "--chart-1": "oklch(48.8% .243 264.376)",
+        "--chart-2": "oklch(69.6% .17 162.48)",
+        "--chart-3": "oklch(76.9% .188 70.08)",
+        "--chart-4": "oklch(62.7% .265 303.9)",
+        "--chart-5": "oklch(64.5% .246 16.439)",
+        "--sidebar": "oklch(20.5% 0 0)",
+        "--sidebar-foreground": "oklch(98.5% 0 0)",
+        "--sidebar-primary": "oklch(48.8% .243 264.376)",
+        "--sidebar-primary-foreground": "oklch(98.5% 0 0)",
+        "--sidebar-accent": "oklch(26.9% 0 0)",
+        "--sidebar-accent-foreground": "oklch(98.5% 0 0)",
+        "--sidebar-border": "oklch(100% 0 0 / .1)",
+        "--sidebar-ring": "oklch(55.6% 0 0)",
+        "--color-fd-primary": "oklch(100% 0 0)",
+      }
+    : {
+        "--background": "oklch(100% 0 0)",
+        "--foreground": "oklch(14.5% 0 0)",
+        "--card": "oklch(100% 0 0)",
+        "--card-foreground": "oklch(14.5% 0 0)",
+        "--popover": "oklch(100% 0 0)",
+        "--popover-foreground": "oklch(14.5% 0 0)",
+        "--primary": "oklch(14.5% 0 0)",
+        "--primary-foreground": "oklch(98.5% 0 0)",
+        "--secondary": "oklch(97% 0 0)",
+        "--secondary-foreground": "oklch(20.5% 0 0)",
+        "--muted": "oklch(97% 0 0)",
+        "--muted-foreground": "oklch(55.6% 0 0)",
+        "--accent": "oklch(97% 0 0)",
+        "--accent-foreground": "oklch(20.5% 0 0)",
+        "--color-fd-accent": "oklch(97% 0 0)",
+        "--color-fd-accent-foreground": "oklch(20.5% 0 0)",
+        "--destructive": "oklch(57.7% .245 27.325)",
+        "--destructive-foreground": "#fafafa",
+        "--border": "oklch(92.2% 0 0)",
+        "--input": "oklch(92.2% 0 0)",
+        "--ring": "oklch(70.8% 0 0)",
+        "--chart-1": "oklch(64.6% .222 41.116)",
+        "--chart-2": "oklch(60% .118 184.704)",
+        "--chart-3": "oklch(39.8% .07 227.392)",
+        "--chart-4": "oklch(82.8% .189 84.429)",
+        "--chart-5": "oklch(76.9% .188 70.08)",
+        "--sidebar": "oklch(98.5% 0 0)",
+        "--sidebar-foreground": "oklch(14.5% 0 0)",
+        "--sidebar-primary": "oklch(20.5% 0 0)",
+        "--sidebar-primary-foreground": "oklch(98.5% 0 0)",
+        "--sidebar-accent": "oklch(92.2% 0 0)",
+        "--sidebar-accent-foreground": "oklch(20.5% 0 0)",
+        "--sidebar-border": "oklch(92.2% 0 0)",
+        "--sidebar-ring": "oklch(70.8% 0 0)",
+        "--color-fd-primary": "oklch(0% 0 0)",
+      };
+
+  return {
+    ...palette,
+    "--brand-accent":
+      typeof theme?.accent === "string" && theme.accent.trim()
+        ? theme.accent.trim()
+        : isDark
+          ? "oklch(26.9% 0 0)"
+          : "oklch(97% 0 0)",
+    "--brand-accent-foreground": isDark
+      ? "oklch(98.5% 0 0)"
+      : "oklch(20.5% 0 0)",
+    "--app-background": "var(--background)",
+    "--app-surface": "var(--card)",
+    "--app-foreground": "var(--foreground)",
+    "--app-muted": "var(--muted-foreground)",
+    "--app-border": "var(--border)",
+    "--app-accent": "var(--brand-accent)",
+    "--app-accent-foreground": "var(--brand-accent-foreground)",
+    "--radius": `${(theme?.radius || 10) / 16}rem`,
+    "--app-radius": `${theme?.radius || 10}px`,
+  };
+}
