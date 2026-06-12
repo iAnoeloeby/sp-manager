@@ -5,7 +5,12 @@
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
     "checkJs": true,
-    "allowJs": true
+    "allowJs": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
