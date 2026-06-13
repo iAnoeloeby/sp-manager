@@ -1,72 +1,78 @@
-import React from 'react'
-import { buildBackgroundImage } from '../utils/backgroundUtils'
-import { refreshDailyWallpaper } from '../../../services/wallpaperService'
+import React from "react";
+import { buildBackgroundImage } from "../utils/backgroundUtils";
+import { refreshDailyWallpaper } from "../../../services/wallpaperService";
 
 const typeOptions = [
-    { value: 'default', label: 'Default' },
-    { value: 'gradient', label: 'Gradient' },
-    { value: 'solid', label: 'Solid' },
-    { value: 'live', label: 'Live Wallpaper' },
-    { value: 'custom', label: 'Custom Wallpaper' },
-]
+    { value: "default", label: "Default" },
+    { value: "gradient", label: "Gradient" },
+    { value: "solid", label: "Solid" },
+    { value: "live", label: "Live Wallpaper" },
+    { value: "custom", label: "Custom Wallpaper" },
+];
 
-export default function BackgroundPicker({ background, mode = 'light', onChange }) {
+export default function BackgroundPicker({
+    background,
+    mode = "light",
+    onChange,
+}) {
     async function useLiveWallpaper() {
-        const wallpaper = await refreshDailyWallpaper(true)
+        const wallpaper = await refreshDailyWallpaper(true);
         if (wallpaper?.url) {
             onChange({
                 ...background,
-                type: 'image',
-                source: 'live',
+                type: "image",
+                source: "live",
                 imageUrl: wallpaper.url,
-            })
+            });
         }
     }
 
     async function getNewOneWallpaper() {
-        const wallpaper = await refreshDailyWallpaper(true, { forceNewSeed: true })
+        const wallpaper = await refreshDailyWallpaper(true, {
+            forceNewSeed: true,
+        });
         if (wallpaper?.url) {
             onChange({
                 ...background,
-                type: 'image',
-                source: 'live',
+                type: "image",
+                source: "live",
                 imageUrl: wallpaper.url,
-            })
+            });
         }
     }
 
     function useCustomWallpaper() {
         onChange({
             ...background,
-            type: 'image',
-            source: 'custom',
-        })
+            type: "image",
+            source: "custom",
+        });
     }
 
     async function handleTypeChange(value) {
-        if (value === 'live') {
-            await useLiveWallpaper()
-            return
+        if (value === "live") {
+            await useLiveWallpaper();
+            return;
         }
 
-        if (value === 'custom') {
-            useCustomWallpaper()
-            return
+        if (value === "custom") {
+            useCustomWallpaper();
+            return;
         }
 
         onChange({
             ...background,
             type: value,
             source: undefined,
-        })
+        });
     }
 
     const selectedType =
-        background.type === 'image'
-            ? background.source === 'live'
-                ? 'live'
-                : 'custom'
-            : background.type
+        background.type === "image"
+            ? background.source === "live"
+                ? "live"
+                : "custom"
+            : background.type;
 
     return (
         <div className="space-y-4">
@@ -74,15 +80,18 @@ export default function BackgroundPicker({ background, mode = 'light', onChange 
                 <div
                     className="h-24 rounded-2xl border border-border/70 bg-surface/80 shadow-sm"
                     style={{
-                        backgroundImage: buildBackgroundImage(background, mode),
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
+                        backgroundImage: buildBackgroundImage(background),
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
                     }}
                 />
             </div>
 
             <div className="space-y-2">
-                <label className="block text-sm font-medium" htmlFor="background-type">
+                <label
+                    className="block text-sm font-medium"
+                    htmlFor="background-type"
+                >
                     Background type
                 </label>
                 <select
@@ -99,80 +108,109 @@ export default function BackgroundPicker({ background, mode = 'light', onChange 
                 </select>
             </div>
 
-            {background.type === 'solid' ? (
+            {background.type === "solid" ? (
                 <div className="space-y-2">
                     <div className="space-y-2 pt-1">
-                        <label className="block text-sm font-medium" htmlFor="background-solid-custom">
+                        <label
+                            className="block text-sm font-medium"
+                            htmlFor="background-solid-custom"
+                        >
                             Custom solid color
                         </label>
                         <input
                             id="background-solid-custom"
                             type="color"
                             value={background.value}
-                            onChange={(event) => onChange({ ...background, value: event.target.value })}
+                            onChange={(event) =>
+                                onChange({
+                                    ...background,
+                                    value: event.target.value,
+                                })
+                            }
                             className="h-12 w-full rounded-theme border border-border bg-surface p-1 accent-accent"
                         />
                     </div>
                 </div>
             ) : null}
 
-            {background.type === 'default' ? (
+            {background.type === "default" ? (
                 <div className="space-y-3 rounded-3xl border border-border/70 bg-background/40 p-4">
                     <div>
-                        <div className="text-sm font-medium">Default background</div>
+                        <div className="text-sm font-medium">
+                            Default background
+                        </div>
                         <div className="mt-1 text-sm text-muted">
-                            {mode === 'dark' ? 'Neutral 900' : 'Neutral 200'}
+                            {mode === "dark" ? "Neutral 900" : "Neutral 200"}
                         </div>
                     </div>
                     <div className="grid gap-2 sm:grid-cols-2">
                         <div className="rounded-2xl border border-border/70 bg-surface px-4 py-3 text-sm text-muted">
-                            Light mode preview: <span className="text-foreground">#e5e7eb</span>
+                            Light mode preview:{" "}
+                            <span className="text-foreground">#ffffff</span>
                         </div>
                         <div className="rounded-2xl border border-border/70 bg-surface px-4 py-3 text-sm text-muted">
-                            Dark mode preview: <span className="text-foreground">#111827</span>
+                            Dark mode preview:{" "}
+                            <span className="text-foreground">#111827</span>
                         </div>
                     </div>
                 </div>
             ) : null}
 
-            {background.type === 'gradient' ? (
+            {background.type === "gradient" ? (
                 <div className="grid gap-3 sm:grid-cols-2">
                     <div className="space-y-2">
-                        <label className="block text-sm font-medium" htmlFor="background-value-1">
+                        <label
+                            className="block text-sm font-medium"
+                            htmlFor="background-value-1"
+                        >
                             Gradient start
                         </label>
                         <input
                             id="background-value-1"
                             type="color"
                             value={background.value}
-                            onChange={(event) => onChange({ ...background, value: event.target.value })}
+                            onChange={(event) =>
+                                onChange({
+                                    ...background,
+                                    value: event.target.value,
+                                })
+                            }
                             className="h-12 w-full rounded-theme border border-border bg-surface p-1 accent-accent"
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="block text-sm font-medium" htmlFor="background-value-2">
+                        <label
+                            className="block text-sm font-medium"
+                            htmlFor="background-value-2"
+                        >
                             Gradient end
                         </label>
                         <input
                             id="background-value-2"
                             type="color"
                             value={background.value2}
-                            onChange={(event) => onChange({ ...background, value2: event.target.value })}
+                            onChange={(event) =>
+                                onChange({
+                                    ...background,
+                                    value2: event.target.value,
+                                })
+                            }
                             className="h-12 w-full rounded-theme border border-border bg-surface p-1 accent-accent"
                         />
                     </div>
                 </div>
             ) : null}
 
-            {background.type === 'image' ? (
+            {background.type === "image" ? (
                 <div className="space-y-3">
-                    {background.source === 'live' ? (
+                    {background.source === "live" ? (
                         <div className="rounded-3xl border border-border/70 bg-background/40 p-4 text-sm text-muted">
-                            Daily wallpaper is sourced from a remote image URL and refreshed automatically.
+                            Daily wallpaper is sourced from a remote image URL
+                            and refreshed automatically.
                         </div>
                     ) : null}
 
-                    {background.source === 'live' ? (
+                    {background.source === "live" ? (
                         <div className="flex items-center gap-2">
                             <button
                                 type="button"
@@ -191,16 +229,24 @@ export default function BackgroundPicker({ background, mode = 'light', onChange 
                         </div>
                     ) : null}
 
-                    {background.source === 'custom' ? (
+                    {background.source === "custom" ? (
                         <div className="space-y-2">
-                            <label className="block text-sm font-medium" htmlFor="background-image-url">
+                            <label
+                                className="block text-sm font-medium"
+                                htmlFor="background-image-url"
+                            >
                                 Image URL
                             </label>
                             <input
                                 id="background-image-url"
                                 type="url"
                                 value={background.imageUrl}
-                                onChange={(event) => onChange({ ...background, imageUrl: event.target.value })}
+                                onChange={(event) =>
+                                    onChange({
+                                        ...background,
+                                        imageUrl: event.target.value,
+                                    })
+                                }
                                 className="w-full rounded-theme border border-border bg-surface px-4 py-3 text-foreground outline-none transition focus:ring-4 focus:ring-accent/20"
                                 placeholder="https://example.com/background.jpg"
                             />
@@ -208,7 +254,10 @@ export default function BackgroundPicker({ background, mode = 'light', onChange 
                     ) : null}
 
                     <div className="space-y-2">
-                        <label className="block text-sm font-medium" htmlFor="background-overlay">
+                        <label
+                            className="block text-sm font-medium"
+                            htmlFor="background-overlay"
+                        >
                             Overlay strength
                         </label>
                         <input
@@ -218,12 +267,17 @@ export default function BackgroundPicker({ background, mode = 'light', onChange 
                             max="1"
                             step="0.05"
                             value={background.overlay}
-                            onChange={(event) => onChange({ ...background, overlay: Number(event.target.value) })}
+                            onChange={(event) =>
+                                onChange({
+                                    ...background,
+                                    overlay: Number(event.target.value),
+                                })
+                            }
                             className="w-full accent-accent"
                         />
                     </div>
                 </div>
             ) : null}
         </div>
-    )
+    );
 }
