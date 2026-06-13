@@ -8,7 +8,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/Dialog";
-import { CheckCircleIcon } from "@phosphor-icons/react";
+import {
+    CheckCircleIcon,
+    WarningCircleIcon,
+    SpinnerGapIcon,
+} from "@phosphor-icons/react";
+import { resolveValidUrl } from "../services/shortcutService";
 
 const emptyForm = {
     id: "",
@@ -24,6 +29,8 @@ export default function ShortcutForm({
     onOpenChange,
 }) {
     const [form, setForm] = useState(emptyForm);
+    const [error, setError] = useState("");
+    const [isChecking, setIsChecking] = useState(false);
 
     useEffect(() => {
         if (shortcut) {
@@ -32,20 +39,44 @@ export default function ShortcutForm({
                 title: shortcut.title || "",
                 url: shortcut.url || "",
             });
-            return;
+        } else {
+            setForm(emptyForm);
         }
-
-        setForm(emptyForm);
+        setError("");
+        setIsChecking(false);
     }, [shortcut, open]);
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
+        if (isChecking) return;
 
-        onSave({
-            id: form.id,
-            title: form.title.trim(),
-            url: form.url,
-        });
+        setError("");
+        setIsChecking(true);
+
+        try {
+            const result = await resolveValidUrl(form.url);
+
+            if (!result.url) {
+                if (result.reason === "format") {
+                    setError(
+                        "Format URL tidak valid. Contoh: tokopedia.com atau www.tokopedia.com",
+                    );
+                } else {
+                    setError(
+                        "URL tidak dapat diakses. Periksa koneksi Anda atau pastikan alamat website benar.",
+                    );
+                }
+                return;
+            }
+
+            onSave({
+                id: form.id,
+                title: form.title.trim(),
+                url: result.url,
+            });
+        } finally {
+            setIsChecking(false);
+        }
     }
 
     return (
@@ -66,6 +97,7 @@ export default function ShortcutForm({
                     id="shortcut-form"
                     className="space-y-4"
                     onSubmit={handleSubmit}
+                    noValidate
                 >
                     <div className="space-y-2">
                         <label
@@ -99,24 +131,44 @@ export default function ShortcutForm({
                         </label>
                         <input
                             id="shortcut-url"
-                            type="url"
+                            type="text"
                             required
                             value={form.url}
-                            onChange={(event) =>
+                            onChange={(event) => {
+                                if (error) setError("");
                                 setForm((current) => ({
                                     ...current,
                                     url: event.target.value,
-                                }))
-                            }
-                            className="w-full rounded-theme border border-border bg-surface px-4 py-3 text-foreground outline-none transition focus:ring-4 focus:ring-accent/20"
+                                }));
+                            }}
+                            aria-invalid={error ? "true" : "false"}
+                            className={`w-full rounded-theme border bg-surface px-4 py-3 text-foreground outline-none transition focus:ring-4 ${
+                                error
+                                    ? "border-destructive focus:ring-destructive/20"
+                                    : "border-border focus:ring-accent/20"
+                            }`}
                             placeholder="github.com"
                         />
+                        {error ? (
+                            <p
+                                role="alert"
+                                className="flex items-start gap-1.5 text-xs text-destructive"
+                            >
+                                <WarningCircleIcon
+                                    size={14}
+                                    weight="fill"
+                                    className="mt-0.5 shrink-0"
+                                />
+                                <span>{error}</span>
+                            </p>
+                        ) : null}
                     </div>
                 </form>
 
-                <DialogFooter className="flex sm:justify-between">
+                <DialogFooter className="sm:justify-between">
                     <Button
                         onClick={onClose}
+                        disabled={isChecking}
                         className="border border-border bg-background text-foreground hover:bg-background/80"
                     >
                         Cancel
@@ -124,22 +176,26 @@ export default function ShortcutForm({
                     <Button
                         type="submit"
                         form="shortcut-form"
+                        disabled={isChecking}
                         className="group"
                     >
-                        {shortcut ? "Update shortcut" : "Save shortcut"}
-
-                        <CheckCircleIcon
-                            weight="fill"
-                            className="fill-white group-hover:fill-green-500 transition-colors duration-150"
-                        />
-                        {/* <CheckCircleIcon
-                            weight="regular"
-                            className="block group-hover:hidden fill-white"
-                        />
-                        <CheckCircleIcon
-                            weight="fill"
-                            className="hidden group-hover:block fill-green-400"
-                        /> */}
+                        {isChecking ? (
+                            <>
+                                Checking
+                                <SpinnerGapIcon
+                                    weight="bold"
+                                    className="animate-spin"
+                                />
+                            </>
+                        ) : (
+                            <>
+                                {shortcut ? "Update shortcut" : "Save shortcut"}
+                                <CheckCircleIcon
+                                    weight="fill"
+                                    className="fill-background group-hover:fill-green-500 transition-colors duration-150"
+                                />
+                            </>
+                        )}
                     </Button>
                 </DialogFooter>
             </DialogContent>
