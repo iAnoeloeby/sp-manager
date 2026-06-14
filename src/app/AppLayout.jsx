@@ -1,28 +1,67 @@
-import React, { useMemo, useState } from "react"
-import PageShell from "../components/layout/PageShell"
-import Button from "@/components/ui/Button";
-import {Card} from "../components/ui/Card"
-import IconButton from "../components/ui/IconButton"
-import SearchBar from "../features/search/components/SearchBar"
-import Greeting from "../features/greeting/components/Greeting"
-import ClockWidget from "../features/clock/components/ClockWidget"
-import ShortcutGrid from "../features/shortcuts/components/ShortcutGrid"
-import SettingsPanel from "../features/settings/components/SettingsPanel"
-import { buildBackgroundImage } from "../features/settings/utils/backgroundUtils"
-import { GearSixIcon } from "@phosphor-icons/react";
+import React, { useMemo, useState } from "react";
+import { GearSixIcon, PencilSimpleIcon } from "@phosphor-icons/react";
 
+import BottomDock from "../components/layout/BottomDock";
+import LeftRail from "../components/layout/LeftRail";
+import PageShell from "../components/layout/PageShell";
+import RightRail from "../components/layout/RightRail";
+import Button from "@/components/ui/Button";
+
+import SearchBar from "../features/search/components/SearchBar";
+import ClockWidget from "../features/clock/components/ClockWidget";
+import SettingsPanel from "../features/settings/components/SettingsPanel";
+import WorkspaceFrame from "../components/layout/WorkspaceFrame";
+import ShortcutWidget from "../features/shortcuts/layout/ShortcutWidget";
+import { buildBackgroundImage } from "../features/settings/utils/backgroundUtils";
+import DockItemGrid from "@/features/dockItems/components/DockItemGrid";
+import DockItemEditor from "@/features/dockItems/components/DockItemAdd";
+import { useEditMode } from "@/features/dockItems/hooks/useEditMode";
+
+/**
+ * @typedef {import("@/features/dock-items/services/dockItemsService").DockItem} DockItem
+ * @typedef {import("@/features/dock-items/services/dockItemsService").DockItemType} DockItemType
+ * @typedef {import("@/features/dock-items/hooks/useDockItems").DockItemsKey} DockItemsKey
+ */
+
+/**
+ * @param {{
+ *   settings: any,
+ *   shortcuts: any[],
+ *   leftRailItems: DockItem[],
+ *   rightRailItems: DockItem[],
+ *   dockItems: DockItem[],
+ *   workspaceItems: DockItem[],
+ *   onAddDockItem: (slot: DockItemsKey, item: Partial<DockItem> & { type: DockItemType }) => void,
+ *   onDeleteDockItem: (slot: DockItemsKey, id: string) => void,
+ *   onSettingsChange: (settings: any) => void,
+ *   onSettingsReset: () => void,
+ *   onAddShortcut: (shortcut: any) => void,
+ *   onUpdateShortcut: (id: string, patch: any) => void,
+ *   onDeleteShortcut: (id: string) => void,
+ * }} props
+ */
 export default function AppLayout({
     settings,
     shortcuts,
+    leftRailItems,
+    rightRailItems,
+    dockItems,
+    workspaceItems,
+    onAddDockItem,
+    onDeleteDockItem,
     onSettingsChange,
     onSettingsReset,
     onAddShortcut,
     onUpdateShortcut,
     onDeleteShortcut,
 }) {
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const [isShortcutFormOpen, setIsShortcutFormOpen] = useState(false);
-    const [editingShortcut, setEditingShortcut] = useState(null);
+    const [openSettings, setOpenSettings] = useState(false);
+    const editMode = useEditMode();
+    const [globalEditorOpen, setGlobalEditorOpen] = useState(false);
+    const [globalEditorSlot, setGlobalEditorSlot] = useState(
+        /** @type {DockItemsKey | null} */ (null),
+    );
+
     const isImageBackground =
         settings.background?.type === "image" &&
         Boolean(settings.background?.imageUrl);
@@ -38,32 +77,39 @@ export default function AppLayout({
             : {};
 
         return {
-            backgroundImage: buildBackgroundImage(
-                settings.background,
-                settings.mode,
-            ),
+            backgroundImage: buildBackgroundImage(settings.background),
             ...imageBackgroundStyle,
         };
-    }, [isImageBackground, settings.background, settings.mode]);
+    }, [isImageBackground, settings.background]);
 
-    function openShortcutForm(shortcut = null) {
-        setEditingShortcut(shortcut);
-        setIsShortcutFormOpen(true);
+    /**
+     * @param {DockItemsKey} slot
+     * @param {{ type: DockItemType, name: string, url: string }} item
+     */
+    function addToSlot(slot, item) {
+        onAddDockItem(slot, item);
     }
 
-    function closeShortcutForm() {
-        setIsShortcutFormOpen(false);
-        setEditingShortcut(null);
+    /**
+     * @param {DockItemsKey} slot
+     * @param {string} id
+     */
+    function deleteFromSlot(slot, id) {
+        onDeleteDockItem(slot, id);
     }
 
-    function saveShortcut(nextShortcut) {
-        if (editingShortcut) {
-            onUpdateShortcut(editingShortcut.id, nextShortcut);
-        } else {
-            onAddShortcut(nextShortcut);
-        }
+    /**
+     * @param {DockItemsKey} slot
+     */
+    function openGlobalEditor(slot) {
+        setGlobalEditorSlot(slot);
+        setGlobalEditorOpen(true);
+    }
 
-        closeShortcutForm();
+    /** @param {{ type: DockItemType, name: string, url: string }} item */
+    function handleGlobalSave(item) {
+        if (!globalEditorSlot) return;
+        onAddDockItem(globalEditorSlot, item);
     }
 
     return (
@@ -71,79 +117,13 @@ export default function AppLayout({
             className="relative min-h-screen bg-background text-foreground"
             style={pageStyle}
         >
-            <div className="min-h-screen min-w-screen flex bg-background/20 backdrop-blur-xs">
-                <aside className="max-md:hidden flex flex-col my-2">
-                    <div className="flex flex-col items-center px-2">
-                        <Button
-                            variant="ghost"
-                            size="icon-xl"
-                            label="Open settings"
-                            onClick={() => setIsSettingsOpen(true)}
-                            className="text-foreground hover:text-foreground/70"
-                        >
-                            <GearSixIcon
-                                weight="regular"
-                                className="text-current"
-                            />
-                        </Button>
-                    </div>
-                </aside>
-
-                <main className="relative flex-1 min-h-screen">
-                    <PageShell className="relative min-h-screen py-6 pt-20 md:py-8 md:pt-20">
-                        <div className="space-y-6">
-                            <ClockWidget
-                                format={settings.clockFormat}
-                                showSeconds={settings.showSeconds}
-                            />
-
-                            <div className="flex flex-col">
-                                <section className="mt-[5.25rem] mb-[5.25rem]">
-                                    <SearchBar
-                                        engineId={settings.searchEngine}
-                                    />
-                                </section>
-
-                                <section>
-                                    <Card className="border-border/70 bg-surface/85">
-                                        <ShortcutGrid
-                                            shortcuts={shortcuts}
-                                            onEdit={openShortcutForm}
-                                            onDelete={onDeleteShortcut}
-                                            onAdd={() => openShortcutForm()}
-                                        />
-                                    </Card>
-                                </section>
-                            </div>
-                        </div>
-                    </PageShell>
-                </main>
-
-                <aside className="max-md:hidden flex flex-col my-2">
-                    <div className="sticky flex flex-col items-center px-2">
-                        <Button
-                            variant="ghost"
-                            size="icon-xl"
-                            label="Open settings"
-                            onClick={() => setIsSettingsOpen(true)}
-                            className="text-foreground hover:text-foreground/70"
-                        >
-                            <GearSixIcon
-                                weight="regular"
-                                className="text-current"
-                            />
-                        </Button>
-                    </div>
-                </aside>
-            </div>
-
-            <div className="md:hidden">
-                <div className="fixed right-2 top-4 z-20 flex flex-col items-center gap-2">
+            <div className="min-w-screen flex bg-background/20 backdrop-blur-xs">
+                <LeftRail>
                     <Button
                         variant="ghost"
                         size="icon-xl"
                         label="Open settings"
-                        onClick={() => setIsSettingsOpen(true)}
+                        onClick={() => setOpenSettings(true)}
                         className="text-foreground hover:text-foreground/70"
                     >
                         <GearSixIcon
@@ -151,13 +131,127 @@ export default function AppLayout({
                             className="text-current"
                         />
                     </Button>
-                </div>
+                    <DockItemGrid
+                        area="leftRail"
+                        items={leftRailItems}
+                        onAdd={(item) => addToSlot("leftRailItems", item)}
+                        onDelete={(id) => deleteFromSlot("leftRailItems", id)}
+                        className="grid-cols-1"
+                    />
+                </LeftRail>
+
+                <PageShell className="relative min-h-screen">
+                    <div className="min-h-[calc(100vh-7rem)] items-center justify-center grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_fit-content]">
+                        <div className="flex items-center justify-center">
+                            <ClockWidget
+                                format={settings.clockFormat}
+                                showSeconds={settings.showSeconds}
+                            />
+                        </div>
+
+                        <section>
+                            <SearchBar engineId={settings.searchEngine} />
+                        </section>
+
+                        <section>
+                            <WorkspaceFrame title="Main workspace">
+                                {workspaceItems.length > 0 ? (
+                                    <DockItemGrid
+                                        area="workspace"
+                                        items={workspaceItems}
+                                        className="grid grid-cols-12"
+                                    />
+                                ) : (
+                                    <ShortcutWidget
+                                        shortcuts={shortcuts}
+                                        onAddShortcut={onAddShortcut}
+                                        onUpdateShortcut={onUpdateShortcut}
+                                        onDeleteShortcut={onDeleteShortcut}
+                                    />
+                                )}
+                            </WorkspaceFrame>
+                        </section>
+                    </div>
+                </PageShell>
+
+                <RightRail>
+                    <Button
+                        variant="ghost"
+                        size="icon-xl"
+                        label="Open settings"
+                        onClick={() => setOpenSettings(true)}
+                        className="text-foreground hover:text-foreground/70"
+                    >
+                        <GearSixIcon
+                            weight="regular"
+                            className="text-current"
+                        />
+                    </Button>
+                    <DockItemGrid
+                        area="rightRail"
+                        items={rightRailItems}
+                        onAdd={(item) => addToSlot("rightRailItems", item)}
+                        onDelete={(id) => deleteFromSlot("rightRailItems", id)}
+                        className="grid-cols-1"
+                    />
+                </RightRail>
             </div>
 
+            <BottomDock>
+                <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-1">
+                        <Button
+                            variant="ghost"
+                            size="icon-xl"
+                            label="Open settings"
+                            onClick={() => setOpenSettings(true)}
+                            className="text-foreground hover:text-foreground/70"
+                        >
+                            <GearSixIcon
+                                weight="regular"
+                                className="text-current"
+                            />
+                        </Button>
+                        <Button
+                            variant={
+                                editMode.editingAll ? "secondary" : "ghost"
+                            }
+                            size="icon-xl"
+                            label={
+                                editMode.editingAll
+                                    ? "Stop editing docks"
+                                    : "Edit docks"
+                            }
+                            aria-pressed={editMode.editingAll}
+                            onClick={editMode.toggleGlobalEdit}
+                            className="text-foreground hover:text-foreground/70"
+                        >
+                            <PencilSimpleIcon
+                                weight="regular"
+                                className="text-current"
+                            />
+                        </Button>
+                    </div>
+                    <DockItemGrid
+                        area="bottomDock"
+                        items={dockItems}
+                        onAdd={() => openGlobalEditor("dockItems")}
+                        onDelete={(id) => deleteFromSlot("dockItems", id)}
+                        className="grid-cols-12 grid-rows-none"
+                    />
+                </div>
+            </BottomDock>
+
+            <DockItemEditor
+                open={globalEditorOpen}
+                onOpenChange={setGlobalEditorOpen}
+                onSave={handleGlobalSave}
+            />
+
             <SettingsPanel
-                open={isSettingsOpen}
+                open={openSettings}
                 settings={settings}
-                onClose={() => setIsSettingsOpen(false)}
+                onClose={() => setOpenSettings(false)}
                 onChange={onSettingsChange}
                 onReset={onSettingsReset}
             />
