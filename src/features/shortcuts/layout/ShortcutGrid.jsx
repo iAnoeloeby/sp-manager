@@ -3,41 +3,40 @@ import { PlusIcon } from "@phosphor-icons/react";
 import Button from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import { ItemGrid } from "@/components/ui/ItemGrid";
+import { ShortcutIcon } from "@/features/shortcuts/components/ShortcutIcon";
 import { cn } from "@/utils/cn";
+import ShortcutItem from "../components/ShortcutItem";
+import { ItemAdd } from "@/components/ui/Item";
 
-/**
- * @typedef {import("../components/ShortcutMenu").Shortcut} Shortcut
- */
-
-/**
- * @typedef {Object} ShortcutGridProps
- * @property {Shortcut[]} shortcuts
- * @property {(s: Shortcut) => void} [onEdit]
- * @property {(s: Shortcut) => void} [onCopy]
- * @property {(id: string) => void} [onDelete]
- * @property {() => void} [onAdd]
- * @property {string} [className]
- */
-
-/**
- * Grid untuk semua shortcut.
- *
- * - Jika `shortcuts` kosong → render `EmptyState` (bukan grid) dengan tombol "+"
- *   yang aman dari `onAdd` undefined.
- * - Jika ada item → render `ItemGrid` dengan handler diteruskan.
- *
- * @param {ShortcutGridProps} props
- */
 export default function ShortcutGrid({
     shortcuts,
+    onAdd,
     onEdit,
     onCopy,
     onDelete,
-    onAdd,
     className = "",
 }) {
+    const finalItems = [
+        ...shortcuts.map((shortcut) => ({
+            type: "url",
+            url: shortcut.url,
+            content: (
+                <ShortcutItem
+                    shortcut={shortcut}
+                    onEdit={onEdit}
+                    onCopy={onCopy}
+                    onDelete={onDelete}
+                />
+            ),
+        })),
+        {
+            type: "action",
+            onClick: onAdd,
+            content: <ItemAdd actions={onAdd} />,
+        },
+    ];
+
     if (!shortcuts.length) {
-        // Guard: kalau `onAdd` undefined, tetap render EmptyState tanpa crash.
         const handleEmptyAdd = () => {
             if (onAdd) onAdd();
         };
@@ -57,45 +56,11 @@ export default function ShortcutGrid({
 
     return (
         <ItemGrid
-            items={shortcuts}
+            items={finalItems}
             className={cn(
-                "grid-cols-[repeat(auto-fill,minmax(4rem,1fr))] ",
+                "grid-cols-[repeat(auto-fill,minmax(4rem,1fr))]",
                 className,
             )}
-            onAdd={onAdd}
-            onEdit={onEdit}
-            onCopy={onCopy}
-            onDelete={onDelete}
         />
     );
-}
-
-{
-    /* Legacy: dulunya render manual dengan animasi `layoutId`.
-       Sekarang sudah di-delegate ke ItemGrid. */
-}
-{
-    /* <div
-            className={
-                "grid grid-cols-[repeat(auto-fill,minmax(4rem,1fr))] gap-3 " +
-                className
-            }
-            onMouseLeave={() => setHoveredIndex(null)}
-        >
-            {shortcuts.map((shortcut, idx) => (
-                <div
-                    key={shortcut.id}
-                    className="relative inline-block h-fit w-fit aspect-square p-1.5 z-1"
-                    onMouseEnter={() => setHoveredIndex(idx)}
-                >
-                    <ShortcutCard
-                        shortcut={shortcut}
-                        onEdit={onEdit}
-                        onCopy={onCopy}
-                        onDelete={onDelete}
-                        isHovered={hoveredIndex === idx}
-                    />
-                </div>
-            ))}
-        </div> */
 }

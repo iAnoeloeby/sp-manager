@@ -19,7 +19,7 @@ import { useShortcuts } from "../hooks/useShortcuts";
  *
  * @param {{ shortcut: Shortcut }} props
  */
-export function ShortcutLogo({ shortcut }) {
+export function ShortcutIcon({ shortcut }) {
     const [failed, setFailed] = useState(false);
     const host = useMemo(() => getHost(shortcut.url), [shortcut.url]);
     const fallback =
@@ -34,7 +34,7 @@ export function ShortcutLogo({ shortcut }) {
         <img
             src={faviconUrl}
             alt=""
-            className="h-10 w-10 object-contain z-11"
+            className="h-10 w-10 object-contain z-1"
             onError={() => setFailed(true)}
         />
     );

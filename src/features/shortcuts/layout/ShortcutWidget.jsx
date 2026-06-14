@@ -46,7 +46,6 @@ export default function ShortcutWidget({
     );
 
     /**
-     * Buka dialog dalam mode ADD.
      * @type {() => void}
      */
     const handleAdd = useCallback(() => {
@@ -55,7 +54,6 @@ export default function ShortcutWidget({
     }, []);
 
     /**
-     * Buka dialog dalam mode EDIT.
      * @type {(s: Shortcut) => void}
      */
     const handleEdit = useCallback((shortcut) => {
@@ -97,7 +95,6 @@ export default function ShortcutWidget({
     );
 
     /**
-     * Salin URL ke clipboard. Dipakai oleh Popover & ContextMenu.
      * @param {Shortcut} shortcut
      * @type {(s: Shortcut) => Promise<void>}
      */
