@@ -5,7 +5,7 @@ export default function RightRail({ children, className = "" }) {
     return (
         <aside
             className={cn(
-                "hidden flex-col gap-1 w-fit md:flex items-center my-2",
+                "hidden flex-col gap-2 w-fit md:flex items-center my-2 px-2",
                 className,
             )}
         >

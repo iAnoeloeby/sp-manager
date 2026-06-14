@@ -5,7 +5,7 @@ import { Card } from "../ui/Card";
 export default function BottomDock({ children, className = "" }) {
     return (
         <section className="fixed inset-x-0 bottom-0 z-30 mx-auto">
-            <Card className={cn("w-full rounded-none py-0", className)}>
+            <Card className={cn("w-full rounded-none p-2", className)}>
                 {children}
             </Card>
         </section>
