@@ -5,7 +5,7 @@ import BottomDock from "../components/layout/BottomDock";
 import LeftRail from "../components/layout/LeftRail";
 import PageShell from "../components/layout/PageShell";
 import RightRail from "../components/layout/RightRail";
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 
 import SearchBar from "../features/search/components/SearchBar";
 import ClockWidget from "../features/clock/components/ClockWidget";

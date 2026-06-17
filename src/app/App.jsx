@@ -5,14 +5,19 @@ import { useShortcuts } from '../features/shortcuts/hooks/useShortcuts'
 import { useDockItems } from '../features/dockItems/hooks/useDockItems'
 
 export default function App() {
-    const { settings, loading: settingsLoading, updateSettings, resetSettings } = useSettings()
+    const {
+        settings,
+        loading: settingsLoading,
+        updateSettings,
+        resetSettings,
+    } = useSettings();
     const {
         shortcuts,
         loading: shortcutsLoading,
         addShortcut,
         updateShortcut,
         deleteShortcut,
-    } = useShortcuts()
+    } = useShortcuts();
     const {
         leftRailItems,
         rightRailItems,
@@ -21,10 +26,10 @@ export default function App() {
         loading: dockItemsLoading,
         addItem,
         deleteItem,
-    } = useDockItems()
+    } = useDockItems();
 
     if (settingsLoading || shortcutsLoading || dockItemsLoading || !settings) {
-        return null
+        return null;
     }
 
     return (
@@ -43,5 +48,5 @@ export default function App() {
             onUpdateShortcut={updateShortcut}
             onDeleteShortcut={deleteShortcut}
         />
-    )
+    );
 }

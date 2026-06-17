@@ -1,6 +1,6 @@
 import React from "react";
 import { PlusIcon } from "@phosphor-icons/react";
-import Button from "@/components/ui/Button";
+import {Button} from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import { ItemGrid } from "@/components/ui/ItemGrid";
 import { ShortcutIcon } from "@/features/shortcuts/components/ShortcutIcon";

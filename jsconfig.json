@@ -6,6 +6,8 @@
     "jsx": "react-jsx",
     "checkJs": true,
     "allowJs": true,
+    "noImplicitAny": false,
+    "strict": false,
 
     "baseUrl": ".",
     "paths": {
