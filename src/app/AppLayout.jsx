@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 
 import SearchBar from "../features/search/components/SearchBar";
 import ClockWidget from "../features/clock/components/ClockWidget";
-import SettingsPanel from "../features/settings/components/SettingsPanel";
+import SettingsPanel from "../features/settings/layout/SettingsPanel";
 import WorkspaceFrame from "../components/layout/WorkspaceFrame";
 import ShortcutWidget from "../features/shortcuts/layout/ShortcutWidget";
 import { buildBackgroundImage } from "../features/settings/utils/backgroundUtils";
