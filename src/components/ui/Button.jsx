@@ -26,10 +26,11 @@ const buttonVariants = cva(
                 xs: "h-6 gap-1 px-2.5 text-xs has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3",
                 sm: "h-7 gap-1 px-3 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
                 lg: "h-9 gap-1.5 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
-                icon: "size-8",
+                icon: "size-8 [&_svg:not([class*='size-'])]:size-4",
                 "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
-                "icon-sm": "size-7",
-                "icon-lg": "size-9",
+                "icon-sm": "size-7 [&_svg:not([class*='size-'])]:size-3.5",
+                "icon-lg": "size-9 [&_svg:not([class*='size-'])]:size-4.5",
+                "icon-xl": "size-10 [&_svg:not([class*='size-'])]:size-5",
             },
         },
         defaultVariants: {
@@ -39,6 +40,38 @@ const buttonVariants = cva(
     },
 );
 
+/**
+ * @typedef {"default" | "outline" | "secondary" | "ghost" | "destructive" | "link"} ButtonVariant
+ */
+
+/**
+ * @typedef {
+ *   | "default"
+ *   | "xs"
+ *   | "sm"
+ *   | "lg"
+ *   | "icon"
+ *   | "icon-xs"
+ *   | "icon-sm"
+ *   | "icon-lg"
+ *   | "icon-xl"
+ * } ButtonSize
+ */
+
+/**
+ * @typedef {React.ComponentPropsWithoutRef<"button"> & {
+ *   variant?: ButtonVariant;
+ *   size?: ButtonSize;
+ *   asChild?: boolean;
+ * }} ButtonProps
+ */
+
+/**
+ * @type {React.ForwardRefExoticComponent<
+ *   ButtonProps &
+ *   React.RefAttributes<HTMLButtonElement>
+ * >}
+ */
 const Button = React.forwardRef(function Button(
     {
         className = "",

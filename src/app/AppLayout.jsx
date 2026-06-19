@@ -18,9 +18,9 @@ import DockItemEditor from "@/features/dockItems/components/DockItemAdd";
 import { useEditMode } from "@/features/dockItems/hooks/useEditMode";
 
 /**
- * @typedef {import("@/features/dock-items/services/dockItemsService").DockItem} DockItem
- * @typedef {import("@/features/dock-items/services/dockItemsService").DockItemType} DockItemType
- * @typedef {import("@/features/dock-items/hooks/useDockItems").DockItemsKey} DockItemsKey
+ * @typedef {import("@/features/dockItems/services/dockItemsService").DockItem} DockItem
+ * @typedef {import("@/features/dockItems/services/dockItemsService").DockItemType} DockItemType
+ * @typedef {import("@/features/dockItems/hooks/useDockItems").DockItemsKey} DockItemsKey
  */
 
 /**
@@ -122,7 +122,6 @@ export default function AppLayout({
                     <Button
                         variant="ghost"
                         size="icon-xl"
-                        label="Open settings"
                         onClick={() => setOpenSettings(true)}
                         className="text-foreground hover:text-foreground/70"
                     >
@@ -178,7 +177,6 @@ export default function AppLayout({
                     <Button
                         variant="ghost"
                         size="icon-xl"
-                        label="Open settings"
                         onClick={() => setOpenSettings(true)}
                         className="text-foreground hover:text-foreground/70"
                     >
@@ -203,7 +201,6 @@ export default function AppLayout({
                         <Button
                             variant="ghost"
                             size="icon-xl"
-                            label="Open settings"
                             onClick={() => setOpenSettings(true)}
                             className="text-foreground hover:text-foreground/70"
                         >
@@ -217,11 +214,6 @@ export default function AppLayout({
                                 editMode.editingAll ? "secondary" : "ghost"
                             }
                             size="icon-xl"
-                            label={
-                                editMode.editingAll
-                                    ? "Stop editing docks"
-                                    : "Edit docks"
-                            }
                             aria-pressed={editMode.editingAll}
                             onClick={editMode.toggleGlobalEdit}
                             className="text-foreground hover:text-foreground/70"
