@@ -388,7 +388,7 @@ function SidebarMenuButton({
     isActive = false,
     variant = "default",
     size = "default",
-    tooltip = {},
+    tooltip = null,
     className = "",
     ...props
 }) {
