@@ -8,6 +8,7 @@
     "allowJs": true,
     "noImplicitAny": false,
     "strict": false,
+    "types": ["chrome"],
 
     "ignoreDeprecations": "6.0",
 

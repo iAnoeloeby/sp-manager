@@ -1,10 +1,10 @@
 import React from "react";
 
 import { Separator } from "@/components/ui/separator";
-import manifest from "./../../../../../public/manifest.json";
 
 export default function About() {
-    const { name, version, description, permissions = [] } = manifest;
+    const { name, version, description, permissions } =
+        chrome.runtime.getManifest();
 
     return (
         <>

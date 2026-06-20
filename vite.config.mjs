@@ -1,27 +1,18 @@
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
+import { crx } from "@crxjs/vite-plugin";
 import { defineConfig } from "vite";
-import path, { resolve } from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import tailwindcss from "@tailwindcss/vite";
+import manifest from "./manifest.config.mjs";
 
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-    base: "./",
-    publicDir: "public",
-    plugins: [react(), tailwindcss()],
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "./src"),
+            "@": path.resolve(projectRoot, "./src"),
         },
     },
-    build: {
-        outDir: "dist",
-        emptyOutDir: true,
-        rollupOptions: {
-            input: {
-                newtab: resolve(__dirname, "newtab.html"),
-            },
-        },
-    },
+    plugins: [react(), tailwindcss(), crx({ manifest })],
 });
