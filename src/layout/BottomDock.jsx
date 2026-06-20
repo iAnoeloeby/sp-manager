@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Card } from "../ui/Card";
+import { Card } from "@/components/ui/Card";
 
 export default function BottomDock({ children, className = "" }) {
     return (

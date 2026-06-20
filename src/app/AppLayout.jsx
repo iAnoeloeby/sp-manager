@@ -4,11 +4,11 @@ import { GearSixIcon, PencilSimpleIcon } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/Button";
 
-import PageShell from "@/components/layout/PageShell";
-import WorkspaceFrame from "@/components/layout/WorkspaceFrame";
-import LeftRail from "@/components/layout/LeftRail";
-import RightRail from "@/components/layout/RightRail";
-import BottomDock from "@/components/layout/BottomDock";
+import PageShell from "@/layout/PageShell";
+import WorkspaceFrame from "@/layout/WorkspaceFrame";
+import LeftRail from "@/layout/LeftRail";
+import RightRail from "@/layout/RightRail";
+import BottomDock from "@/layout/BottomDock";
 import SettingsPanel from "@/features/settings/layout/SettingsPanel";
 
 import SearchBar from "@/features/search/components/SearchBar";
@@ -116,10 +116,10 @@ export default function AppLayout({
 
     return (
         <div
-            className="relative min-h-screen bg-background text-foreground"
+            className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-background text-foreground"
             style={pageStyle}
         >
-            <div className="min-w-screen flex bg-background/20 backdrop-blur-xs">
+            <div className="flex w-full min-w-0 bg-background/20 backdrop-blur-xs">
                 <LeftRail>
                     <Button
                         variant="ghost"
@@ -142,19 +142,19 @@ export default function AppLayout({
                 </LeftRail>
 
                 <PageShell className="relative min-h-screen">
-                    <div className="min-h-[calc(100vh-7rem)] items-center justify-center grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_fit-content]">
-                        <div className="flex items-center justify-center">
+                    <div className="min-h-[calc(100vh-7rem)] w-full min-w-0 items-center justify-center grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_fit-content] xl:gap-8">
+                        <div className="flex min-w-0 items-center justify-center">
                             <ClockWidget
                                 format={settings.clockFormat}
                                 showSeconds={settings.showSeconds}
                             />
                         </div>
 
-                        <section>
+                        <section className="min-w-0">
                             <SearchBar engineId={settings.searchEngine} />
                         </section>
 
-                        <section>
+                        <section className="min-w-0">
                             <WorkspaceFrame title="Main workspace">
                                 {workspaceItems.length > 0 ? (
                                     <DockItemGrid
