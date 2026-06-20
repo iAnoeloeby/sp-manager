@@ -68,7 +68,7 @@ function ItemAdd({ actions }) {
         <Item
             onClick={actions}
             variant="secondary"
-            className="relative z-2 bg-surface/50 group-hover:border-border"
+            className="relative z-2 bg-transparent group-hover:border-border hover:bg-transparent"
         >
             <PlusIcon size={20} weight="bold" aria-hidden="true" />
         </Item>
