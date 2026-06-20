@@ -1,21 +1,11 @@
 import React, { useMemo, useState } from "react";
-import { GearSixIcon, PencilSimpleIcon } from "@phosphor-icons/react";
-
-
-import { Button } from "@/components/ui/Button";
 
 import PageShell from "@/layout/PageShell";
-import WorkspaceFrame from "@/layout/WorkspaceFrame";
 import LeftRail from "@/layout/LeftRail";
 import RightRail from "@/layout/RightRail";
 import BottomDock from "@/layout/BottomDock";
 import SettingsPanel from "@/features/settings/layout/SettingsPanel";
 
-import SearchBar from "@/features/search/components/SearchBar";
-import ClockWidget from "@/features/clock/components/ClockWidget";
-import ShortcutWidget from "@/features/shortcuts/layout/ShortcutWidget";
-import DockItemGrid from "@/features/dockItems/components/DockItemGrid";
-import DockItemEditor from "@/features/dockItems/components/DockItemAdd";
 import { useEditMode } from "@/features/dockItems/hooks/useEditMode";
 import { buildBackgroundImage } from "@/features/settings/utils/backgroundUtils";
 
@@ -120,126 +110,49 @@ export default function AppLayout({
             style={pageStyle}
         >
             <div className="flex w-full min-w-0 bg-background/20 backdrop-blur-xs">
-                <LeftRail>
-                    <Button
-                        variant="ghost"
-                        size="icon-xl"
-                        onClick={() => setOpenSettings(true)}
-                        className="text-foreground hover:text-foreground/70"
-                    >
-                        <GearSixIcon
-                            weight="regular"
-                            className="text-current"
-                        />
-                    </Button>
-                    <DockItemGrid
-                        area="leftRail"
-                        items={leftRailItems}
-                        onAdd={(item) => addToSlot("leftRailItems", item)}
-                        onDelete={(id) => deleteFromSlot("leftRailItems", id)}
-                        className="grid-cols-1"
-                    />
-                </LeftRail>
+                <LeftRail
+                    workspace={{
+                        item: leftRailItems,
+                        addToSlot,
+                        deleteFromSlot,
+                        setOpenSettings,
+                    }}
+                />
 
-                <PageShell className="relative min-h-screen">
-                    <div className="min-h-[calc(100vh-7rem)] w-full min-w-0 items-center justify-center grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_fit-content] xl:gap-8">
-                        <div className="flex min-w-0 items-center justify-center">
-                            <ClockWidget
-                                format={settings.clockFormat}
-                                showSeconds={settings.showSeconds}
-                            />
-                        </div>
+                <PageShell
+                    workspace={{
+                        item: workspaceItems,
+                        setOpenSettings,
+                        shortcuts,
+                        onAddShortcut,
+                        onUpdateShortcut,
+                        onDeleteShortcut,
+                    }}
+                    settings={settings}
+                    className="relative min-h-screen"
+                />
 
-                        <section className="min-w-0">
-                            <SearchBar engineId={settings.searchEngine} />
-                        </section>
-
-                        <section className="min-w-0">
-                            <WorkspaceFrame title="Main workspace">
-                                {workspaceItems.length > 0 ? (
-                                    <DockItemGrid
-                                        area="workspace"
-                                        items={workspaceItems}
-                                        className="grid grid-cols-12"
-                                    />
-                                ) : (
-                                    <ShortcutWidget
-                                        shortcuts={shortcuts}
-                                        onAddShortcut={onAddShortcut}
-                                        onUpdateShortcut={onUpdateShortcut}
-                                        onDeleteShortcut={onDeleteShortcut}
-                                    />
-                                )}
-                            </WorkspaceFrame>
-                        </section>
-                    </div>
-                </PageShell>
-
-                <RightRail>
-                    <Button
-                        variant="ghost"
-                        size="icon-xl"
-                        onClick={() => setOpenSettings(true)}
-                        className="text-foreground hover:text-foreground/70"
-                    >
-                        <GearSixIcon
-                            weight="regular"
-                            className="text-current"
-                        />
-                    </Button>
-                    <DockItemGrid
-                        area="rightRail"
-                        items={rightRailItems}
-                        onAdd={(item) => addToSlot("rightRailItems", item)}
-                        onDelete={(id) => deleteFromSlot("rightRailItems", id)}
-                        className="grid-cols-1"
-                    />
-                </RightRail>
+                <RightRail
+                    workspace={{
+                        item: rightRailItems,
+                        addToSlot,
+                        deleteFromSlot,
+                        setOpenSettings,
+                    }}
+                />
             </div>
 
-            <BottomDock>
-                <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-1">
-                        <Button
-                            variant="ghost"
-                            size="icon-xl"
-                            onClick={() => setOpenSettings(true)}
-                            className="text-foreground hover:text-foreground/70"
-                        >
-                            <GearSixIcon
-                                weight="regular"
-                                className="text-current"
-                            />
-                        </Button>
-                        <Button
-                            variant={
-                                editMode.editingAll ? "secondary" : "ghost"
-                            }
-                            size="icon-xl"
-                            aria-pressed={editMode.editingAll}
-                            onClick={editMode.toggleGlobalEdit}
-                            className="text-foreground hover:text-foreground/70"
-                        >
-                            <PencilSimpleIcon
-                                weight="regular"
-                                className="text-current"
-                            />
-                        </Button>
-                    </div>
-                    <DockItemGrid
-                        area="bottomDock"
-                        items={dockItems}
-                        onAdd={() => openGlobalEditor("dockItems")}
-                        onDelete={(id) => deleteFromSlot("dockItems", id)}
-                        className="grid-cols-12 grid-rows-none"
-                    />
-                </div>
-            </BottomDock>
-
-            <DockItemEditor
-                open={globalEditorOpen}
-                onOpenChange={setGlobalEditorOpen}
-                onSave={handleGlobalSave}
+            <BottomDock
+                workspace={{
+                    item: dockItems,
+                    setOpenSettings,
+                    editMode,
+                    openGlobalEditor,
+                    deleteFromSlot,
+                    handleGlobalSave,
+                    globalEditorOpen,
+                    setGlobalEditorOpen,
+                }}
             />
 
             <SettingsPanel
