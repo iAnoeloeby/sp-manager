@@ -4,9 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import manifest from "./../../../../../public/manifest.json";
 
 export default function About() {
-    const { name, version, description, permissions } = manifest;
-
-    const perms = Array.isArray(permissions) ? permissions : [];
+    const { name, version, description, permissions = [] } = manifest;
 
     return (
         <>
@@ -41,9 +39,9 @@ export default function About() {
                 <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-xs">
                     <dt className="text-muted">Permissions</dt>
                     <dd className="text-foreground">
-                        {perms.length > 0 ? (
+                        {permissions.length > 0 ? (
                             <div className="flex flex-wrap gap-1">
-                                {perms.map((p) => (
+                                {permissions.map((p) => (
                                     <span
                                         key={p}
                                         className="rounded-md border border-border px-1.5 py-0.5 text-[10px] font-medium text-muted"
