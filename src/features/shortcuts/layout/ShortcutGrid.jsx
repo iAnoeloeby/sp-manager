@@ -1,12 +1,14 @@
 import React from "react";
+
 import { PlusIcon } from "@phosphor-icons/react";
+
 import {Button} from "@/components/ui/Button";
-import EmptyState from "@/components/ui/EmptyState";
-import { ItemGrid } from "@/components/ui/ItemGrid";
-import { ShortcutIcon } from "@/features/shortcuts/components/ShortcutIcon";
-import { cn } from "@/utils/cn";
-import ShortcutItem from "../components/ShortcutItem";
 import { ItemAdd } from "@/components/ui/Item";
+import { ItemGrid } from "@/components/ui/ItemGrid";
+import ShortcutItem from "@/features/shortcuts/components/ShortcutItem";
+import EmptyState from "@/components/ui/EmptyState";
+
+import { cn } from "@/utils/cn";
 
 export default function ShortcutGrid({
     shortcuts,

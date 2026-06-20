@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
+
 import {
     loadShortcuts,
-    removeShortcut,
     saveShortcuts,
-    updateShortcut,
     upsertShortcut,
-} from "../services/shortcutService";
+    updateShortcut,
+    removeShortcut,
+} from "@/features/shortcuts/services/shortcutService";
+
 
 export function useShortcuts() {
     const [shortcuts, setShortcuts] = useState([]);

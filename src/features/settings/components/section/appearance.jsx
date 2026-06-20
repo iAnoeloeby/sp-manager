@@ -1,7 +1,9 @@
 import React from "react";
 
-import { cn } from "@/lib/utils";
+import * as Phosphor from "@phosphor-icons/react";
 
+import { Button } from "@/components/ui/Button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggleGroup";
 import {
     Field,
     FieldGroup,
@@ -9,13 +11,6 @@ import {
     FieldSeparator,
     FieldTitle,
 } from "@/components/ui/field";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggleGroup";
-import * as Phosphor from "@phosphor-icons/react";
-import DialogColorPicker from "@/features/settings/components/DialogColorPicker";
-import { Button } from "@/components/ui/Button";
-
-import RadiusCustom from "@/features/settings/components/RadiusCustom";
 import {
     Select,
     SelectContent,
@@ -24,8 +19,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import BackgroundSetting from "../BackgroundSetting";
+import RadiusCustom from "@/features/settings/components/RadiusCustom";
+import DialogColorPicker from "@/features/settings/components/DialogColorPicker";
+
+import BackgroundSetting from "@/features/settings/components/BackgroundSetting";
 import { getBackgroundMode } from "@/features/settings/utils/backgroundUtils";
+
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { cn } from "@/lib/utils";
 
 const radiusOptions = [
     {

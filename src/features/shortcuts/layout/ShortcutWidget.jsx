@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/Button";
 import { PlusIcon } from "@phosphor-icons/react";
 import ShortcutGrid from "@/features/shortcuts/layout/ShortcutGrid";
 import ShortcutForm from "@/features/shortcuts/components/ShortcutDialog";
-import WorkspaceFrame from "@/components/layout/WorkspaceFrame";
 
 /**
  * @typedef {import("../components/ShortcutMenu").Shortcut} Shortcut

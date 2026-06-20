@@ -1,6 +1,11 @@
-import React from 'react'
-import { getGreeting } from '../utils/greetingUtils'
+import React from "react";
 
-export default function Greeting({ displayName = '' }) {
-    return <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted">{getGreeting(new Date(), displayName)}</p>
+import { getGreeting } from "@/features/greeting/utils/greetingUtils";
+
+export default function Greeting({ displayName = "" }) {
+    return (
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted">
+            {getGreeting(new Date(), displayName)}
+        </p>
+    );
 }

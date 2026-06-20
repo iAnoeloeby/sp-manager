@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect, useId, useCallback } from "react";
+
 import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
 import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
-import { executeSearch } from "../services/searchService";
+
+import { executeSearch } from "@/features/search/services/searchService";
+
+import { cn } from "@/lib/utils";
 
 const transition = {
     duration: 0.4,

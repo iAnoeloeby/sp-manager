@@ -1,8 +1,9 @@
 import React from 'react'
-import AppLayout from './AppLayout'
-import { useSettings } from '../features/settings/hooks/useSettings'
-import { useShortcuts } from '../features/shortcuts/hooks/useShortcuts'
-import { useDockItems } from '../features/dockItems/hooks/useDockItems'
+
+import AppLayout from "@/app/AppLayout";
+import { useSettings } from "@/features/settings/hooks/useSettings";
+import { useDockItems } from "@/features/dockItems/hooks/useDockItems";
+import { useShortcuts } from "@/features/shortcuts/hooks/useShortcuts";
 
 export default function App() {
     const {

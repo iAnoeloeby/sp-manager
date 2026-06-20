@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import {
     loadSlotItems,
-    removeSlotItem,
     saveSlotItems,
-    updateSlotItem,
     upsertSlotItem,
-} from "../services/dockItemsService";
+    updateSlotItem,
+    removeSlotItem,
+} from "@/features/dockItems/services/dockItemsService";
 
 /**
  * @typedef {import("../services/dockItemsService").DockItem} DockItem

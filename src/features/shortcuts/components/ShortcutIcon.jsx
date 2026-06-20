@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { useShortcuts } from "../hooks/useShortcuts";
 
 /**
  * Bentuk minimal sebuah shortcut yang dibutuhkan oleh komponen ini.
