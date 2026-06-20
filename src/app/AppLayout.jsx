@@ -1,21 +1,23 @@
 import React, { useMemo, useState } from "react";
 import { GearSixIcon, PencilSimpleIcon } from "@phosphor-icons/react";
 
-import BottomDock from "../components/layout/BottomDock";
-import LeftRail from "../components/layout/LeftRail";
-import PageShell from "../components/layout/PageShell";
-import RightRail from "../components/layout/RightRail";
+
 import { Button } from "@/components/ui/Button";
 
-import SearchBar from "../features/search/components/SearchBar";
-import ClockWidget from "../features/clock/components/ClockWidget";
-import SettingsPanel from "../features/settings/layout/SettingsPanel";
-import WorkspaceFrame from "../components/layout/WorkspaceFrame";
-import ShortcutWidget from "../features/shortcuts/layout/ShortcutWidget";
-import { buildBackgroundImage } from "../features/settings/utils/backgroundUtils";
+import PageShell from "@/components/layout/PageShell";
+import WorkspaceFrame from "@/components/layout/WorkspaceFrame";
+import LeftRail from "@/components/layout/LeftRail";
+import RightRail from "@/components/layout/RightRail";
+import BottomDock from "@/components/layout/BottomDock";
+import SettingsPanel from "@/features/settings/layout/SettingsPanel";
+
+import SearchBar from "@/features/search/components/SearchBar";
+import ClockWidget from "@/features/clock/components/ClockWidget";
+import ShortcutWidget from "@/features/shortcuts/layout/ShortcutWidget";
 import DockItemGrid from "@/features/dockItems/components/DockItemGrid";
 import DockItemEditor from "@/features/dockItems/components/DockItemAdd";
 import { useEditMode } from "@/features/dockItems/hooks/useEditMode";
+import { buildBackgroundImage } from "@/features/settings/utils/backgroundUtils";
 
 /**
  * @typedef {import("@/features/dockItems/services/dockItemsService").DockItem} DockItem

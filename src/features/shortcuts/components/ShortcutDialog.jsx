@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "../../../components/ui/Button";
+
+import { Button } from "@/components/ui/Button";
 import {
     Dialog,
     DialogContent,
@@ -13,7 +14,7 @@ import {
     WarningCircleIcon,
     SpinnerGapIcon,
 } from "@phosphor-icons/react";
-import { resolveValidUrl } from "../services/shortcutService";
+import { resolveValidUrl } from "@/features/shortcuts/services/shortcutService";
 
 const emptyForm = {
     id: "",

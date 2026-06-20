@@ -1,17 +1,14 @@
 import React from "react";
-import {
-    buildBackgroundImage,
-    getBackgroundMode,
-} from "../utils/backgroundUtils";
-import { refreshDailyWallpaper } from "../../../services/wallpaperService";
+
+import * as Phosphor from "@phosphor-icons/react";
+
 import { Button } from "@/components/ui/Button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/Card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggleGroup";
-import DialogColorPicker from "@/features/settings/components/DialogColorPicker";
-import * as Phosphor from "@phosphor-icons/react";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     Field,
@@ -19,7 +16,6 @@ import {
     FieldDescription,
     FieldLabel,
     FieldLegend,
-    FieldSeparator,
     FieldTitle,
 } from "@/components/ui/field";
 import {
@@ -29,8 +25,14 @@ import {
     InputGroupInput,
 } from "@/components/ui/input-group";
 import { openLink } from "@/hooks/useOpenLink";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
+
+import DialogColorPicker from "@/features/settings/components/DialogColorPicker";
+import {
+    getBackgroundMode,
+    buildBackgroundImage,
+} from "@/features/settings/utils/backgroundUtils";
+
+import { refreshDailyWallpaper } from "@/services/wallpaperService";
 
 function readFileAsDataUrl(file) {
     return new Promise((resolve, reject) => {

@@ -1,11 +1,12 @@
-import { defaultSettings } from "../../../constants/defaultSettings";
+import { buildBackgroundImage } from "@/features/settings/utils/backgroundUtils";
+
+import { storageKeys } from "@/constants/storageKeys";
+import { defaultSettings } from "@/constants/defaultSettings";
 import {
-    defaultSearchEngineId,
     searchEngines,
-} from "../../../constants/searchEngines";
-import { storageKeys } from "../../../constants/storageKeys";
-import storageService from "../../../services/storageService";
-import { buildBackgroundImage } from "../utils/backgroundUtils";
+    defaultSearchEngineId,
+} from "@/constants/searchEngines";
+import storageService from "@/services/storageService";
 
 function clone(value) {
     return JSON.parse(JSON.stringify(value));

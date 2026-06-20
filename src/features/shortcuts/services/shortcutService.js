@@ -1,5 +1,5 @@
-import storageService from "../../../services/storageService";
-import { storageKeys } from "../../../constants/storageKeys";
+import { storageKeys } from "@/constants/storageKeys";
+import storageService from "@/services/storageService";
 
 function createId() {
     return `shortcut-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;

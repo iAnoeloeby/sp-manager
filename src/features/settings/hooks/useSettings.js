@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import {
+    loadSettings,
+    saveSettings,
+    normalizeSettings,
     applySettingsToDocument,
     createDefaultSettings,
-    loadSettings,
-    normalizeSettings,
-    saveSettings,
-} from "../services/settingsService";
+} from "@/features/settings/services/settingsService";
 import {
     getCurrentWallpaper,
     refreshDailyWallpaper,
     wallpaperStorageKey,
-} from "../../../services/wallpaperService";
+} from "@/services/wallpaperService";
 
 export function useSettings() {
     const [settings, setSettings] = useState(null);

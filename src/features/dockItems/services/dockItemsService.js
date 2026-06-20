@@ -1,6 +1,7 @@
-import storageService from "../../../services/storageService";
-import { storageKeys } from "../../../constants/storageKeys";
-import { normalizeUrl } from "../../shortcuts/services/shortcutService";
+import { storageKeys } from "@/constants/storageKeys";
+import { normalizeUrl } from "@/features/shortcuts/services/shortcutService";
+
+import storageService from "@/services/storageService";
 
 /**
  * @typedef {"button" | "link" | "shortcut"} DockItemType
@@ -33,14 +34,14 @@ export const DOCK_ITEM_TYPES = ["button", "link", "shortcut"];
  * @returns {boolean}
  */
 function isPlainObject(value) {
-  return value != null && typeof value === "object" && !Array.isArray(value);
+    return value != null && typeof value === "object" && !Array.isArray(value);
 }
 
 /**
  * @returns {string}
  */
 function createId() {
-  return `dock-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    return `dock-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 /**
@@ -48,10 +49,10 @@ function createId() {
  * @returns {DockItemType | null}
  */
 function normalizeType(value) {
-  if (typeof value !== "string") return null;
-  return DOCK_ITEM_TYPES.some((t) => t === value)
-    ? /** @type {DockItemType} */ (value)
-    : null;
+    if (typeof value !== "string") return null;
+    return DOCK_ITEM_TYPES.some((t) => t === value)
+        ? /** @type {DockItemType} */ (value)
+        : null;
 }
 
 /**
@@ -59,8 +60,8 @@ function normalizeType(value) {
  * @returns {string}
  */
 function normalizeName(value) {
-  if (typeof value !== "string") return "";
-  return value.trim();
+    if (typeof value !== "string") return "";
+    return value.trim();
 }
 
 /**
@@ -80,37 +81,37 @@ function normalizeName(value) {
  * @returns {DockItem | null}
  */
 export function normalizeDockItem(item = {}) {
-  if (!isPlainObject(item)) return null;
+    if (!isPlainObject(item)) return null;
 
-  const type = normalizeType(item.type);
-  if (!type) return null;
+    const type = normalizeType(item.type);
+    if (!type) return null;
 
-  const name = normalizeName(item.name);
-  // For "shortcut"/"link" we require a valid URL; for "button" we allow
-  // an empty URL (button may not navigate), but reject invalid formats.
-  /** @type {string} */
-  let url = "";
-  if (type === "button") {
-    url = normalizeUrl(item.url) || "";
-    if (item.url && !url) return null;
-  } else {
-    const normalized = normalizeUrl(item.url);
-    if (!normalized) return null;
-    url = normalized;
-  }
+    const name = normalizeName(item.name);
+    // For "shortcut"/"link" we require a valid URL; for "button" we allow
+    // an empty URL (button may not navigate), but reject invalid formats.
+    /** @type {string} */
+    let url = "";
+    if (type === "button") {
+        url = normalizeUrl(item.url) || "";
+        if (item.url && !url) return null;
+    } else {
+        const normalized = normalizeUrl(item.url);
+        if (!normalized) return null;
+        url = normalized;
+    }
 
-  /** @type {Record<string, any>} */
-  const config = isPlainObject(item.config)
-    ? { .../** @type {Record<string, any>} */ (item.config) }
-    : {};
+    /** @type {Record<string, any>} */
+    const config = isPlainObject(item.config)
+        ? { .../** @type {Record<string, any>} */ (item.config) }
+        : {};
 
-  return {
-    id: typeof item.id === "string" && item.id ? item.id : createId(),
-    type,
-    name,
-    url,
-    config,
-  };
+    return {
+        id: typeof item.id === "string" && item.id ? item.id : createId(),
+        type,
+        name,
+        url,
+        config,
+    };
 }
 
 /**
@@ -118,10 +119,10 @@ export function normalizeDockItem(item = {}) {
  * @returns {DockItem[]}
  */
 export function normalizeDockItems(items = []) {
-  if (!Array.isArray(items)) return [];
-  return items
-    .map((item) => normalizeDockItem(item))
-    .filter((item) => item != null);
+    if (!Array.isArray(items)) return [];
+    return items
+        .map((item) => normalizeDockItem(item))
+        .filter((item) => item != null);
 }
 
 /**
@@ -129,18 +130,18 @@ export function normalizeDockItems(items = []) {
  * @returns {string}
  */
 function getStorageKey(slot) {
-  switch (slot) {
-    case "leftRailItems":
-      return storageKeys.leftRailItems;
-    case "rightRailItems":
-      return storageKeys.rightRailItems;
-    case "dockItems":
-      return storageKeys.dockItems;
-    case "workspaceItems":
-      return storageKeys.workspaceItems;
-    default:
-      return "";
-  }
+    switch (slot) {
+        case "leftRailItems":
+            return storageKeys.leftRailItems;
+        case "rightRailItems":
+            return storageKeys.rightRailItems;
+        case "dockItems":
+            return storageKeys.dockItems;
+        case "workspaceItems":
+            return storageKeys.workspaceItems;
+        default:
+            return "";
+    }
 }
 
 /**
@@ -148,10 +149,10 @@ function getStorageKey(slot) {
  * @returns {Promise<DockItem[]>}
  */
 export async function loadSlotItems(slot) {
-  const key = getStorageKey(slot);
-  if (!key) return [];
-  const stored = await storageService.getItem(key, null);
-  return normalizeDockItems(stored || []);
+    const key = getStorageKey(slot);
+    if (!key) return [];
+    const stored = await storageService.getItem(key, null);
+    return normalizeDockItems(stored || []);
 }
 
 /**
@@ -160,11 +161,11 @@ export async function loadSlotItems(slot) {
  * @returns {Promise<DockItem[]>}
  */
 export async function saveSlotItems(slot, items) {
-  const key = getStorageKey(slot);
-  if (!key) return [];
-  const normalized = normalizeDockItems(items);
-  await storageService.setItem(key, normalized);
-  return normalized;
+    const key = getStorageKey(slot);
+    if (!key) return [];
+    const normalized = normalizeDockItems(items);
+    await storageService.setItem(key, normalized);
+    return normalized;
 }
 
 /**
@@ -176,17 +177,17 @@ export async function saveSlotItems(slot, items) {
  * @returns {DockItem[]}
  */
 export function upsertSlotItem(items, nextItem) {
-  const normalized = normalizeDockItem(nextItem);
-  if (!normalized) return items;
+    const normalized = normalizeDockItem(nextItem);
+    if (!normalized) return items;
 
-  const list = Array.isArray(items) ? items : [];
-  const exists = list.some((entry) => entry.id === normalized.id);
-  if (exists) {
-    return list.map((entry) =>
-      entry.id === normalized.id ? normalized : entry,
-    );
-  }
-  return [...list, normalized];
+    const list = Array.isArray(items) ? items : [];
+    const exists = list.some((entry) => entry.id === normalized.id);
+    if (exists) {
+        return list.map((entry) =>
+            entry.id === normalized.id ? normalized : entry,
+        );
+    }
+    return [...list, normalized];
 }
 
 /**
@@ -197,14 +198,14 @@ export function upsertSlotItem(items, nextItem) {
  * @returns {DockItem[]}
  */
 export function updateSlotItem(items, itemId, patch) {
-  if (!itemId) return items;
-  const list = Array.isArray(items) ? items : [];
-  return list
-    .map((entry) => {
-      if (entry.id !== itemId) return entry;
-      return normalizeDockItem({ ...entry, ...patch, id: entry.id });
-    })
-    .filter((entry) => entry != null);
+    if (!itemId) return items;
+    const list = Array.isArray(items) ? items : [];
+    return list
+        .map((entry) => {
+            if (entry.id !== itemId) return entry;
+            return normalizeDockItem({ ...entry, ...patch, id: entry.id });
+        })
+        .filter((entry) => entry != null);
 }
 
 /**
@@ -214,20 +215,20 @@ export function updateSlotItem(items, itemId, patch) {
  * @returns {DockItem[]}
  */
 export function removeSlotItem(items, itemId) {
-  if (!itemId) return items;
-  const list = Array.isArray(items) ? items : [];
-  return list.filter((entry) => entry.id !== itemId);
+    if (!itemId) return items;
+    const list = Array.isArray(items) ? items : [];
+    return list.filter((entry) => entry.id !== itemId);
 }
 
 const dockItemsService = {
-  DOCK_ITEM_TYPES,
-  loadSlotItems,
-  saveSlotItems,
-  normalizeDockItem,
-  normalizeDockItems,
-  upsertSlotItem,
-  updateSlotItem,
-  removeSlotItem,
+    DOCK_ITEM_TYPES,
+    loadSlotItems,
+    saveSlotItems,
+    normalizeDockItem,
+    normalizeDockItems,
+    upsertSlotItem,
+    updateSlotItem,
+    removeSlotItem,
 };
 
 export default dockItemsService;

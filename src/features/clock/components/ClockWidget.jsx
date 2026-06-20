@@ -1,6 +1,7 @@
 import React from "react";
-import { formatDate, formatTime } from "../../../utils/dateUtils";
-import { useClock } from "../hooks/useClock";
+
+import { useClock } from "@/features/clock/hooks/useClock";
+import { formatTime, formatDate } from "@/utils/dateUtils";
 
 function timeChars(timeText) {
     return Array.from(timeText).map((char, index) => {
