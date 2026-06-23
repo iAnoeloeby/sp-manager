@@ -1,9 +1,10 @@
-import React, { forwardRef } from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import React from "react";
 
-import { cn } from "@/lib/utils";
 import { PlusIcon } from "@phosphor-icons/react";
+import { Slot } from "@radix-ui/react-slot";
+
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 const itemVariants = cva(
     "group/item relative inline-flex shrink-0 p-2 items-center justify-center rounded-lg border border-transparent bg-clip-padding transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -32,47 +33,48 @@ const itemVariants = cva(
 /**
  * @typedef {Object} ItemProps
  * @property {boolean} [asChild]
- * @property {React.MouseEventHandler<HTMLDivElement>} [onClick]
- * @property {React.ReactNode} children
- * @property {string} [className]
- * @property {"default" | "ghost" | "secondary"} [variant]
+ * @property {"default"|"ghost"|"secondary"} [variant]
  * @property {"xs"|"sm"|"default"|"lg"} [size]
+ * @property {string} [className]
+ * @property {React.ReactNode} [children]
  */
 
-/** @type {React.ForwardRefRenderFunction<HTMLDivElement, ItemProps>} */
-const Item = forwardRef(
-    (
-        {
-            asChild = false,
-            className = "",
-            variant = "default",
-            size = "default",
-            ...props
-        },
-        ref,
-    ) => {
-        return (
-            <div
-                ref={ref}
-                className={cn(itemVariants({ variant, size }), className)}
-                {...props}
-            />
-        );
+/**
+ * @type {React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement> >}
+ */
+const Item = React.forwardRef(function Item(
+    {
+        asChild = false,
+        className = "",
+        variant = "default",
+        size = "default",
+        ...props
     },
-);
+    ref,
+) {
+    const Comp = asChild ? Slot : "div";
+
+    return (
+        <Comp
+            ref={ref}
+            className={cn(itemVariants({ variant, size }), className)}
+            {...props}
+        />
+    );
+});
 
 Item.displayName = "Item";
 
-function ItemAdd({ actions }) {
+function ItemAdd({ actions, ...props }) {
     return (
         <Item
-            onClick={actions}
             variant="secondary"
             className="relative z-2 bg-transparent group-hover:border-border hover:bg-transparent"
+            {...props}
         >
             <PlusIcon size={20} weight="bold" aria-hidden="true" />
         </Item>
     );
 }
 
-export { Item, ItemAdd };
+export { Item, itemVariants, ItemAdd };
