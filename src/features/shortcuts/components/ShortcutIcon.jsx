@@ -1,4 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
+
+import { resolveFavicon } from "@/features/shortcuts/services/faviconService";
 
 /**
  * Bentuk minimal sebuah shortcut yang dibutuhkan oleh komponen ini.
@@ -12,6 +14,17 @@ import React, { useMemo, useState } from "react";
  */
 
 /**
+ * Status internal untuk async URL resolution.
+ *
+ * - "loading" : sedang cek reachability + extract hostname
+ * - "ok"      : URL valid, host tersedia
+ * - "empty"   : input kosong / tidak valid
+ * - "failed"  : network / format error
+ *
+ * @typedef {"loading" | "ok" | "empty" | "failed"} ResolveStatus
+ */
+
+/**
  * Logo favicon untuk sebuah shortcut. Kalau favicon gagal di-load
  * (error / host tidak punya ikon), fallback ke huruf pertama dari
  * judul / hostname.
@@ -19,14 +32,41 @@ import React, { useMemo, useState } from "react";
  * @param {{ shortcut: Shortcut }} props
  */
 export function ShortcutIcon({ shortcut }) {
+    const [faviconUrl, setFaviconUrl] = useState(null);
     const [failed, setFailed] = useState(false);
-    const host = useMemo(() => getHost(shortcut.url), [shortcut.url]);
-    const fallback =
-        (shortcut.title || host || "?").trim().charAt(0).toUpperCase() || "?";
-    const faviconUrl = getFaviconUrl(shortcut.url);
+
+    useEffect(() => {
+        let active = true;
+
+        setFailed(false);
+        setFaviconUrl(null);
+
+        if (!shortcut?.url) return;
+
+        resolveFavicon(shortcut.url).then((url) => {
+            if (!active) return;
+            setFaviconUrl(url);
+        });
+
+        return () => {
+            active = false;
+        };
+    }, [shortcut?.url]);
 
     if (!faviconUrl || failed) {
-        return fallback;
+        const fallbackChar =
+            (shortcut?.title ?? shortcut?.url ?? "")
+                .trim()
+                .charAt(0)
+                .toUpperCase() || "?";
+
+        return (
+            <div className="h-7.5 w-7.5 aspect-square rounded-full bg-muted/40 flex items-center justify-center z-1">
+                <span className="text-md font-extrabold text-foreground/80">
+                    {fallbackChar}
+                </span>
+            </div>
+        );
     }
 
     return (
@@ -37,37 +77,4 @@ export function ShortcutIcon({ shortcut }) {
             onError={() => setFailed(true)}
         />
     );
-}
-
-/**
- *
- * @typedef {Object} ShortcutLogoProps
- * @property {Shortcut} shortcut
- * @returns {JSX.Element}
- */
-
-/**
- * Ambil hostname kanonik dari sebuah URL (strip "www.").
- * @param {string} url
- * @returns {string}
- */
-function getHost(url) {
-    try {
-        return new URL(url).hostname.replace(/^www\./, "");
-    } catch {
-        return url;
-    }
-}
-
-/**
- * Bangun URL favicon via DuckDuckGo.
- * @param {string} url
- * @returns {string}
- */
-function getFaviconUrl(url) {
-    try {
-        return `https://icons.duckduckgo.com/ip3/${getHost(url)}.ico`;
-    } catch {
-        return "";
-    }
 }

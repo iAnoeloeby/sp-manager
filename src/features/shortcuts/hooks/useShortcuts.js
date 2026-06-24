@@ -44,6 +44,8 @@ export function useShortcuts() {
         setShortcuts((current) => removeShortcut(current, shortcutId));
     }, []);
 
+    
+
     return {
         shortcuts,
         loading,

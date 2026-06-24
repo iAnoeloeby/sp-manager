@@ -1,16 +1,14 @@
 import React from "react";
 import {
-    ContextMenu,
-    ContextMenuContent,
     ContextMenuItem,
     ContextMenuSeparator,
-    ContextMenuTrigger,
 } from "@/components/ui/ContextMenu";
 import {
     PencilSimpleIcon,
     CopyIcon,
     TrashSimpleIcon,
 } from "@phosphor-icons/react";
+
 
 /**
  * @typedef {Object} Shortcut
@@ -27,7 +25,7 @@ import {
  */
 
 /**
- * @typedef {Object} ShortcutMenuProps
+ * @typedef {Object} ShortcutContextMenuProps
  * @property {React.ReactNode} children
  * @property {Shortcut} shortcut
  * @property {(s: Shortcut) => void} [onEdit]
@@ -40,50 +38,43 @@ import {
  * Membungkus `children` jadi trigger (right-click / long-press)
  * dan menyediakan menu Edit / Copy URL / Delete.
  *
- * @param {ShortcutMenuProps} props
+ * @param {ShortcutContextMenuProps} props
  */
-export default function ShortcutMenu({
-    children,
-    shortcut,
-    onEdit,
-    onCopy,
-    onDelete,
-}) {
+export default function ShortcutContextMenu({ item, open, setOpen }) {
     /** @param {SelectEvent} e */
     const runEdit = (e) => {
         e.preventDefault?.();
-        onEdit?.(shortcut);
+        onEdit?.(item);
     };
     /** @param {SelectEvent} e */
     const runCopy = (e) => {
         e.preventDefault?.();
-        onCopy?.(shortcut);
+        onCopy?.(item);
     };
     /** @param {SelectEvent} e */
     const runDelete = (e) => {
         e.preventDefault?.();
-        onDelete?.(shortcut.id);
+        onDelete?.(item.id);
     };
 
     return (
-        <ContextMenu>
-            <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
-            <ContextMenuContent className="w-40">
-                <ContextMenuItem onSelect={runEdit}>
-                    <PencilSimpleIcon />
-                    Edit Shortcut
-                </ContextMenuItem>
-                <ContextMenuItem onSelect={runCopy}>
-                    <CopyIcon />
-                    Copy URL
-                </ContextMenuItem>
-                <ContextMenuSeparator />
+        <>
+            <ContextMenuItem onSelect={runEdit}>
+                <PencilSimpleIcon aria-hidden="true" />
+                Edit Shortcut
+            </ContextMenuItem>
 
-                <ContextMenuItem variant="destructive" onSelect={runDelete}>
-                    <TrashSimpleIcon />
-                    Delete Shortcut
-                </ContextMenuItem>
-            </ContextMenuContent>
-        </ContextMenu>
+            <ContextMenuItem onSelect={runCopy}>
+                <CopyIcon aria-hidden="true" />
+                Copy URL
+            </ContextMenuItem>
+
+            <ContextMenuSeparator />
+
+            <ContextMenuItem onSelect={runDelete} variant="destructive">
+                <TrashSimpleIcon aria-hidden="true" />
+                Delete Shortcut
+            </ContextMenuItem>
+        </>
     );
 }

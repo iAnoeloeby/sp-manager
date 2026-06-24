@@ -1,20 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/Button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/Dialog";
-import {
-    CheckCircleIcon,
-    WarningCircleIcon,
-    SpinnerGapIcon,
-} from "@phosphor-icons/react";
-import { resolveValidUrl } from "@/features/shortcuts/services/shortcutService";
+import { WarningCircleIcon } from "@phosphor-icons/react";
+import { resolveValidUrl } from "@/services/urlService";
+import WidgetDialog from "@/widgets/components/WidgetDialog";
 
 const emptyForm = {
     id: "",
@@ -22,30 +10,38 @@ const emptyForm = {
     url: "",
 };
 
-export default function ShortcutForm({
-    open,
-    shortcut,
+/**
+ * Inner form fields for shortcut add/edit.
+ * Designed to be rendered inside WidgetDialog (src/widgets/components/WidgetDialog).
+ *
+ * @param {{
+ *   item?: import("@/contexts/LayoutContext").LayoutItem | null,
+ *   onSave: (data: any) => void,
+ *   formId?: string,
+ * }} props
+ */
+export function ShortcutFormContent({
+    item,
     onSave,
-    onClose,
-    onOpenChange,
+    formId = "shortcut-form",
 }) {
     const [form, setForm] = useState(emptyForm);
     const [error, setError] = useState("");
     const [isChecking, setIsChecking] = useState(false);
 
     useEffect(() => {
-        if (shortcut) {
+        if (item) {
             setForm({
-                id: shortcut.id || "",
-                title: shortcut.title || "",
-                url: shortcut.url || "",
+                id: item.id || "",
+                title: item.title || "",
+                url: item.url || "",
             });
         } else {
             setForm(emptyForm);
         }
         setError("");
         setIsChecking(false);
-    }, [shortcut, open]);
+    }, [item]);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -81,125 +77,111 @@ export default function ShortcutForm({
     }
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>
-                        {shortcut ? "Edit shortcut" : "Add shortcut"}
-                    </DialogTitle>
-                    <DialogDescription>
-                        {shortcut
-                            ? "Update the shortcut title and destination."
-                            : "Add a shortcut for fast access from every new tab."}
-                    </DialogDescription>
-                </DialogHeader>
-
-                <form
-                    id="shortcut-form"
-                    className="space-y-4"
-                    onSubmit={handleSubmit}
-                    noValidate
+        <form
+            id={formId}
+            className="space-y-4"
+            onSubmit={handleSubmit}
+            noValidate
+        >
+            <div className="space-y-2">
+                <label
+                    className="block text-sm font-medium"
+                    htmlFor="shortcut-title"
                 >
-                    <div className="space-y-2">
-                        <label
-                            className="block text-sm font-medium"
-                            htmlFor="shortcut-title"
-                        >
-                            Shortcut Name
-                        </label>
-                        <input
-                            id="shortcut-title"
-                            type="text"
-                            required
-                            value={form.title}
-                            onChange={(event) =>
-                                setForm((current) => ({
-                                    ...current,
-                                    title: event.target.value,
-                                }))
-                            }
-                            className="w-full rounded-theme border border-border bg-surface px-4 py-3 text-foreground outline-none transition focus:ring-4 focus:ring-accent/20"
-                            placeholder="GitHub"
-                        />
-                    </div>
+                    Shortcut Name
+                </label>
+                <input
+                    id="shortcut-title"
+                    type="text"
+                    required
+                    value={form.title}
+                    onChange={(event) =>
+                        setForm((current) => ({
+                            ...current,
+                            title: event.target.value,
+                        }))
+                    }
+                    className="w-full rounded-theme border border-border bg-surface px-4 py-3 text-foreground outline-none transition focus:ring-4 focus:ring-accent/20"
+                    placeholder="GitHub"
+                />
+            </div>
 
-                    <div className="space-y-2">
-                        <label
-                            className="block text-sm font-medium"
-                            htmlFor="shortcut-url"
-                        >
-                            URL
-                        </label>
-                        <input
-                            id="shortcut-url"
-                            type="text"
-                            required
-                            value={form.url}
-                            onChange={(event) => {
-                                if (error) setError("");
-                                setForm((current) => ({
-                                    ...current,
-                                    url: event.target.value,
-                                }));
-                            }}
-                            aria-invalid={error ? "true" : "false"}
-                            className={`w-full rounded-theme border bg-surface px-4 py-3 text-foreground outline-none transition focus:ring-4 ${
-                                error
-                                    ? "border-destructive focus:ring-destructive/20"
-                                    : "border-border focus:ring-accent/20"
-                            }`}
-                            placeholder="github.com"
+            <div className="space-y-2">
+                <label
+                    className="block text-sm font-medium"
+                    htmlFor="shortcut-url"
+                >
+                    URL
+                </label>
+                <input
+                    id="shortcut-url"
+                    type="text"
+                    required
+                    value={form.url}
+                    onChange={(event) => {
+                        if (error) setError("");
+                        setForm((current) => ({
+                            ...current,
+                            url: event.target.value,
+                        }));
+                    }}
+                    aria-invalid={error ? "true" : "false"}
+                    className={`w-full rounded-theme border bg-surface px-4 py-3 text-foreground outline-none transition focus:ring-4 ${
+                        error
+                            ? "border-destructive focus:ring-destructive/20"
+                            : "border-border focus:ring-accent/20"
+                    }`}
+                    placeholder="github.com"
+                />
+                {error ? (
+                    <p
+                        role="alert"
+                        className="flex items-start gap-1.5 text-xs text-destructive"
+                    >
+                        <WarningCircleIcon
+                            size={14}
+                            weight="fill"
+                            className="mt-0.5 shrink-0"
                         />
-                        {error ? (
-                            <p
-                                role="alert"
-                                className="flex items-start gap-1.5 text-xs text-destructive"
-                            >
-                                <WarningCircleIcon
-                                    size={14}
-                                    weight="fill"
-                                    className="mt-0.5 shrink-0"
-                                />
-                                <span>{error}</span>
-                            </p>
-                        ) : null}
-                    </div>
-                </form>
+                        <span>{error}</span>
+                    </p>
+                ) : null}
+            </div>
+        </form>
+    );
+}
 
-                <DialogFooter className="sm:justify-between">
-                    <Button
-                        onClick={onClose}
-                        disabled={isChecking}
-                        className="border border-border bg-background text-foreground hover:bg-background/80"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        type="submit"
-                        form="shortcut-form"
-                        disabled={isChecking}
-                        className="group"
-                    >
-                        {isChecking ? (
-                            <>
-                                Checking
-                                <SpinnerGapIcon
-                                    weight="bold"
-                                    className="animate-spin"
-                                />
-                            </>
-                        ) : (
-                            <>
-                                {shortcut ? "Update shortcut" : "Save shortcut"}
-                                <CheckCircleIcon
-                                    weight="fill"
-                                    className="fill-background group-hover:fill-green-500 transition-colors duration-150"
-                                />
-                            </>
-                        )}
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+/**
+ * Legacy wrapper — kept for backward compat.
+ * New code should use WidgetDialog + ShortcutFormContent instead.
+ */
+export default function ShortcutForm({
+    open,
+    shortcut,
+    onSave,
+    onClose,
+    onOpenChange,
+}) {
+    return (
+        <WidgetDialog
+            open={open}
+            onOpenChange={onOpenChange}
+            onClose={onClose}
+            onSave={(data) => onSave(data)}
+            title={shortcut ? "Edit shortcut" : "Add shortcut"}
+            description={
+                shortcut
+                    ? "Update the shortcut title and destination."
+                    : "Add a shortcut for fast access from every new tab."
+            }
+            isEditing={Boolean(shortcut)}
+            formId="shortcut-form"
+        >
+            <ShortcutFormContent
+                item={shortcut}
+                onSave={onSave}
+                formId="shortcut-form"
+            />
+        </WidgetDialog>
     );
 }
