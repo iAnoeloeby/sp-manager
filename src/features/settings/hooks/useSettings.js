@@ -14,7 +14,7 @@ import {
 } from "@/services/wallpaperService";
 
 export function useSettings() {
-    const [settings, setSettings] = useState(null);
+    const [settings, setSettings] = useState(createDefaultSettings);
     const [loading, setLoading] = useState(true);
     const hydrated = useRef(false);
 
