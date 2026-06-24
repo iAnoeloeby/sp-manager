@@ -103,7 +103,9 @@ export async function loadAllZones() {
  */
 export async function saveAllZones(zones) {
     await Promise.all(
-        Object.entries(zones).map(([zone, items]) => saveZone(/** @type {Zone} */ (zone), items)),
+        Object.entries(zones).map(([zone, items]) =>
+            saveZone(/** @type {Zone} */ (zone), items),
+        ),
     );
 }
 
@@ -121,9 +123,9 @@ function uid() {
  * Appends when id is not found, merges when it is.
  * Generates an id when the item has none.
  *
- * @param {import("@/contexts/LayoutContext").LayoutItem[]} items
- * @param {import("@/contexts/LayoutContext").LayoutItem} item
- * @returns {import("@/contexts/LayoutContext").LayoutItem[]}
+ * @param {import("@/contexts/Layout.context").LayoutItem[]} items
+ * @param {import("@/contexts/Layout.context").LayoutItem} item
+ * @returns {import("@/contexts/Layout.context").LayoutItem[]}
  */
 export function upsertItem(items, item) {
     const exists = items.some((i) => i.id === item.id);
@@ -134,10 +136,10 @@ export function upsertItem(items, item) {
 /**
  * Patch an item by id.
  *
- * @param {import("@/contexts/LayoutContext").LayoutItem[]} items
+ * @param {import("@/contexts/Layout.context").LayoutItem[]} items
  * @param {string} id
- * @param {Partial<import("@/contexts/LayoutContext").LayoutItem>} patch
- * @returns {import("@/contexts/LayoutContext").LayoutItem[]}
+ * @param {Partial<import("@/contexts/Layout.context").LayoutItem>} patch
+ * @returns {import("@/contexts/Layout.context").LayoutItem[]}
  */
 export function updateItemById(items, id, patch) {
     return items.map((i) => (i.id === id ? { ...i, ...patch } : i));
@@ -146,9 +148,9 @@ export function updateItemById(items, id, patch) {
 /**
  * Remove an item by id.
  *
- * @param {import("@/contexts/LayoutContext").LayoutItem[]} items
+ * @param {import("@/contexts/Layout.context").LayoutItem[]} items
  * @param {string} id
- * @returns {import("@/contexts/LayoutContext").LayoutItem[]}
+ * @returns {import("@/contexts/Layout.context").LayoutItem[]}
  */
 export function removeItemById(items, id) {
     return items.filter((i) => i.id !== id);
@@ -160,7 +162,7 @@ export function removeItemById(items, id) {
  * @typedef {Object} Section
  * @property {string} id
  * @property {string} label
- * @property {import("@/contexts/LayoutContext").LayoutItem[]} items
+ * @property {import("@/contexts/Layout.context").LayoutItem[]} items
  */
 
 /**
@@ -172,8 +174,11 @@ export function removeItemById(items, id) {
  */
 export function upsertSection(sections, section) {
     const exists = sections.some((s) => s.id === section.id);
-    if (!exists) return [...sections, { ...section, items: section.items || [] }];
-    return sections.map((s) => (s.id === section.id ? { ...s, ...section } : s));
+    if (!exists)
+        return [...sections, { ...section, items: section.items || [] }];
+    return sections.map((s) =>
+        s.id === section.id ? { ...s, ...section } : s,
+    );
 }
 
 /**
@@ -192,14 +197,12 @@ export function removeSection(sections, sectionId) {
  *
  * @param {Section[]} sections
  * @param {string} sectionId
- * @param {import("@/contexts/LayoutContext").LayoutItem} item
+ * @param {import("@/contexts/Layout.context").LayoutItem} item
  * @returns {Section[]}
  */
 export function addItemToSection(sections, sectionId, item) {
     return sections.map((s) =>
-        s.id === sectionId
-            ? { ...s, items: upsertItem(s.items, item) }
-            : s,
+        s.id === sectionId ? { ...s, items: upsertItem(s.items, item) } : s,
     );
 }
 
@@ -225,7 +228,7 @@ export function removeItemFromSection(sections, sectionId, itemId) {
  * @param {Section[]} sections
  * @param {string} sectionId
  * @param {string} itemId
- * @param {Partial<import("@/contexts/LayoutContext").LayoutItem>} patch
+ * @param {Partial<import("@/contexts/Layout.context").LayoutItem>} patch
  * @returns {Section[]}
  */
 export function updateItemInSection(sections, sectionId, itemId, patch) {

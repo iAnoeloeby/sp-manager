@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { ItemAdd } from "@/components/ui/Item";
-import { useLayout } from "@/contexts/LayoutContext";
+import { useLayout } from "@/contexts/Layout.context";
 import { widgetRegistry } from "@/widgets/registry/widgetRegistry";
 import WidgetDialog from "@/widgets/components/WidgetDialog";
 import { Button } from "@/components/ui/Button";
@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 
 /**
  * @param {{
- *   zone: import("@/contexts/LayoutContext").Zone,
+ *   zone: import("@/contexts/Layout.context").Zone,
  *   allowedTypes?: string[]
  * }} props
  */

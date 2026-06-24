@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WorkspaceRenderer } from "@/features/workspaceFrame/components/WorkspaceRenderer";
 
 import { cn } from "@/lib/utils";
-import { useLayout } from "@/contexts/LayoutContext";
+import { useLayout } from "@/contexts/Layout.context";
 
 export default function WorkspaceFrame({
     title = "Workspace",
@@ -44,37 +44,37 @@ export default function WorkspaceFrame({
             )}
             <CardContent>
                 {activeSection && (
-                <Tabs
-                    defaultValue={activeSection.id}
+                    <Tabs
+                        defaultValue={activeSection.id}
                         onValueChange={setActiveTabId}
-                    className="w-full"
-                >
-                    <TabsList className="">
-                        {workspaceItems.map((section) => (
-                            <TabsTrigger
-                                key={section.id}
-                                value={section.id}
-                                className="px-8"
-                            >
-                                {section.label}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
+                        className="w-full"
+                    >
+                        <TabsList className="">
+                            {workspaceItems.map((section) => (
+                                <TabsTrigger
+                                    key={section.id}
+                                    value={section.id}
+                                    className="px-8"
+                                >
+                                    {section.label}
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
 
-                    {workspaceItems.map((section) => (
-                        <WorkspaceRenderer
-                            key={section.id}
-                            sections={section}
-                            settings={{
-                                workspace: {
-                                    columns: 8,
-                                    cellSize: 80,
-                                    gap: 12,
-                                },
-                            }}
-                        />
-                    ))}
-                </Tabs>
+                        {workspaceItems.map((section) => (
+                            <WorkspaceRenderer
+                                key={section.id}
+                                sections={section}
+                                settings={{
+                                    workspace: {
+                                        columns: 8,
+                                        cellSize: 80,
+                                        gap: 12,
+                                    },
+                                }}
+                            />
+                        ))}
+                    </Tabs>
                 )}
             </CardContent>
         </Card>

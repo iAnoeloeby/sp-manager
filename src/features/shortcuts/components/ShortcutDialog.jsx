@@ -15,7 +15,7 @@ const emptyForm = {
  * Designed to be rendered inside WidgetDialog (src/widgets/components/WidgetDialog).
  *
  * @param {{
- *   item?: import("@/contexts/LayoutContext").LayoutItem | null,
+ *   item?: import("@/contexts/Layout.context").LayoutItem | null,
  *   onSave: (data: any) => void,
  *   formId?: string,
  * }} props
