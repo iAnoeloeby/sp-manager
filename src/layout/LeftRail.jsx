@@ -1,34 +1,58 @@
 import React from "react";
 
-import { GearSixIcon } from "@phosphor-icons/react";
+import { WidgetGrid } from "@/widgets";
+import AddWidgetDialog from "@/widgets/components/AddWidgetDialog";
 
-import { Button } from "@/components/ui/Button";
-import DockItemGrid from "@/features/dockItems/components/DockItemGrid";
+import { WIDGET_TYPES } from "@/widgets/constants/widgetTypes";
 
+import { useLayout } from "@/contexts/Layout.context";
 import { cn } from "@/lib/utils";
 
-export default function LeftRail({ workspace, className = "" }) {
+const settings = {
+    leftRail: {
+        columns: 1,
+        cellSize: 60,
+        gap: 2,
+    },
+};
+
+export default function LeftRail({ className = "" }) {
+    const { leftRailItems, deleteItem } = useLayout();
+
     return (
         <aside
             className={cn(
-                "hidden flex-col gap-2 md:flex md:w-fit items-center my-2 px-2",
+                "hidden flex-col gap-2 md:flex md:w-fit items-center my-2 pt-[62px] px-2",
                 className,
             )}
         >
-            {/* <Button
-                variant="ghost"
-                size="icon-xl"
-                onClick={() => workspace.setOpenSettings(true)}
-                className="text-foreground hover:text-foreground/70"
-            >
-                <GearSixIcon weight="regular" className="text-current" />
-            </Button> */}
-            <DockItemGrid
-                area="leftRail"
-                items={workspace.item}
-                onAdd={(item) => workspace.addToSlot("leftRailItems", item)}
-                onDelete={(id) => workspace.deleteFromSlot("leftRailItems", id)}
-                className="grid-cols-1"
+            <WidgetGrid
+                items={leftRailItems}
+                style={{
+                    "--workspace-columns": settings.leftRail.columns,
+                    "--workspace-cell-size": `${settings.leftRail.cellSize}px`,
+                    "--workspace-gap": `${settings.leftRail.gap}px`,
+                }}
+                features={{
+                    contextMenu: true,
+                }}
+                endItems={[
+                    {
+                        id: "add",
+                        render: () => (
+                            <AddWidgetDialog
+                                zone="leftRail"
+                                allowedTypes={[
+                                    WIDGET_TYPES.ACTION,
+                                    WIDGET_TYPES.SHORTCUT,
+                                    WIDGET_TYPES.TOOL,
+                                ]}
+                            />
+                        ),
+                        cols: 1,
+                        rows: 1,
+                    },
+                ]}
             />
         </aside>
     );

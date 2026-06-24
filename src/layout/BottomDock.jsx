@@ -1,62 +1,58 @@
 import React from "react";
 
-import { GearSixIcon, PencilSimpleIcon } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import DockItemGrid from "@/features/dockItems/components/DockItemGrid";
-import DockItemAdd from "@/features/dockItems/components/DockItemAdd";
+import { WidgetGrid } from "@/widgets";
+import AddWidgetDialog from "@/widgets/components/AddWidgetDialog";
 
+import { WIDGET_TYPES } from "@/widgets/constants/widgetTypes";
+
+import { useLayout } from "@/contexts/Layout.context";
 import { cn } from "@/lib/utils";
 
-export default function BottomDock({ workspace, className = "" }) {
+const settings = {
+    bottomDock: {
+        columns: 22,
+        cellSize: 60,
+        gap: 2,
+    },
+};
+
+export default function BottomDock({ className = "" }) {
+    const { dockItems, deleteItem } = useLayout();
+
     return (
-        <section className="fixed inset-x-0 bottom-0 z-30 mx-auto">
-            <Card className={cn("w-full rounded-none p-2", className)}>
+        <section className="fixed inset-x-0 bottom-0 z-30 mx-auto p-2">
+            <Card className={cn("w-full rounded-md p-1", className)}>
                 <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-1">
-                        <Button
-                            variant="ghost"
-                            size="icon-xl"
-                            onClick={() => workspace.setOpenSettings(true)}
-                            className="text-foreground hover:text-foreground/70"
-                        >
-                            <GearSixIcon
-                                weight="regular"
-                                className="text-current"
-                            />
-                        </Button>
-                        <Button
-                            variant={
-                                workspace.editMode.editingAll
-                                    ? "secondary"
-                                    : "ghost"
-                            }
-                            size="icon-xl"
-                            aria-pressed={workspace.editMode.editingAll}
-                            onClick={workspace.editMode.toggleGlobalEdit}
-                            className="text-foreground hover:text-foreground/70"
-                        >
-                            <PencilSimpleIcon
-                                weight="regular"
-                                className="text-current"
-                            />
-                        </Button>
-                    </div>
-                    <DockItemGrid
-                        area="bottomDock"
-                        items={workspace.item}
-                        onAdd={() => workspace.openGlobalEditor("dockItems")}
-                        onDelete={(id) =>
-                            workspace.deleteFromSlot("dockItems", id)
-                        }
-                        className="grid-cols-12 grid-rows-none"
+                    <WidgetGrid
+                        items={dockItems}
+                        style={{
+                            "--workspace-columns": settings.bottomDock.columns,
+                            "--workspace-cell-size": `${settings.bottomDock.cellSize}px`,
+                            "--workspace-gap": `${settings.bottomDock.gap}px`,
+                        }}
+                        features={{
+                            contextMenu: true,
+                        }}
+                        endItems={[
+                            {
+                                id: "add",
+                                render: () => (
+                                    <AddWidgetDialog
+                                        zone="dock"
+                                        allowedTypes={[
+                                            WIDGET_TYPES.ACTION,
+                                            WIDGET_TYPES.SHORTCUT,
+                                            WIDGET_TYPES.TOOL,
+                                        ]}
+                                    />
+                                ),
+                                cols: 1,
+                                rows: 1,
+                            },
+                        ]}
                     />
                 </div>
-                <DockItemAdd
-                    open={workspace.globalEditorOpen}
-                    onOpenChange={workspace.setGlobalEditorOpen}
-                    onSave={workspace.handleGlobalSave}
-                />
             </Card>
         </section>
     );
