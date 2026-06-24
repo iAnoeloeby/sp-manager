@@ -2,6 +2,7 @@ import React from "react";
 
 import { useClock } from "@/features/clock/hooks/useClock";
 import { formatTime, formatDate } from "@/utils/dateUtils";
+import { useSettings } from "@/features/settings/hooks/useSettings";
 
 function timeChars(timeText) {
     return Array.from(timeText).map((char, index) => {
@@ -26,7 +27,11 @@ function timeChars(timeText) {
     });
 }
 
-export default function ClockWidget({ format = "24h", showSeconds = true }) {
+export default function ClockWidget() {
+    const { settings } = useSettings();
+    const format = settings.clockFormat || "24h";
+    const showSeconds = settings.showSeconds || true;
+
     const now = useClock();
     const timeText = formatTime(now, format, showSeconds);
 

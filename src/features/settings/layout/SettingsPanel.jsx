@@ -26,6 +26,8 @@ import AppearanceBody from "@/features/settings/components/section/appearance";
 import ExtensionBody from "@/features/settings/components/section/extension";
 import AboutBody from "@/features/settings/components/section/about";
 
+import { useSettings } from "@/features/settings/hooks/useSettings";
+
 /**
  * @typedef {{
  *   key: string,
@@ -84,19 +86,11 @@ const SECTIONS = /** @type {SettingsSectionConfig[]} */ ([
 /**
  * @param {{
  *   open: boolean,
- *   settings: any,
  *   onClose: () => void,
- *   onChange: (patch: Record<string, any>) => void,
- *   onReset: () => void,
  * }} props
  */
-export default function SettingsPanel({
-    open,
-    settings,
-    onClose,
-    onChange,
-    onReset,
-}) {
+export default function SettingsPanel({ open, onClose }) {
+    const { settings, updateSettings, resetSettings } = useSettings();
     const [activeKey, setActiveKey] = useState("general");
     const activeSection =
         SECTIONS.find((s) => s.key === activeKey) ?? SECTIONS[0];
@@ -150,14 +144,14 @@ export default function SettingsPanel({
                         >
                             <ActiveBody
                                 settings={settings}
-                                onChange={onChange}
+                                onChange={updateSettings}
                             />
                         </SettingsSection>
                     </SidebarInset>
                 </main>
 
                 <DialogFooter className="sm:justify-between gap-3">
-                    <Button onClick={onReset} variant="outline" size="lg">
+                    <Button onClick={resetSettings} variant="outline" size="lg">
                         Reset
                     </Button>
                     <Button onClick={onClose} variant="default" size="lg">

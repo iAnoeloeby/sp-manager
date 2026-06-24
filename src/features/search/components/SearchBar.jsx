@@ -6,6 +6,7 @@ import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import { executeSearch } from "@/features/search/services/searchService";
 
 import { cn } from "@/lib/utils";
+import { useSettings } from "@/features/settings/hooks/useSettings";
 
 const transition = {
     duration: 0.4,
@@ -23,10 +24,11 @@ const surfaceClass =
 
 /**
  * @param {Object} props
- * @param {string} props.engineId
  * @param {string} [props.className]
  */
-export default function SearchBar({ engineId, className = "" }) {
+export default function SearchBar({ className = "" }) {
+    const { settings } = useSettings();
+    const engineId = settings.searchEngine || "google";
     const [query, setQuery] = useState("");
     const [isExpanded, setIsExpanded] = useState(false);
     const [isFocused, setIsFocused] = useState(false);

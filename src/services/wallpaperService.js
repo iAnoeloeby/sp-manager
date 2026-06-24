@@ -1,4 +1,4 @@
-import storageService from "./storageService";
+import storageAdapter from "./storageAdapter";
 
 export const wallpaperStorageKey = "spm_wallpaper_v1";
 
@@ -30,7 +30,7 @@ function buildWallpaperUrl(seed) {
 }
 
 export async function getCurrentWallpaper() {
-  return storageService.getItem(wallpaperStorageKey, null);
+  return storageAdapter.getItem(wallpaperStorageKey, null);
 }
 
 export async function refreshDailyWallpaper(
@@ -55,7 +55,7 @@ export async function refreshDailyWallpaper(
     updatedAt: Date.now(),
   };
 
-  await storageService.setItem(wallpaperStorageKey, result);
+  await storageAdapter.setItem(wallpaperStorageKey, result);
 
   return result;
 }

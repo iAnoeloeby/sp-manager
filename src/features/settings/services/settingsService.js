@@ -6,7 +6,7 @@ import {
     searchEngines,
     defaultSearchEngineId,
 } from "@/constants/searchEngines";
-import storageService from "@/services/storageService";
+import storageAdapter from "@/services/storageAdapter";
 
 function clone(value) {
     return JSON.parse(JSON.stringify(value));
@@ -86,13 +86,13 @@ export function normalizeSettings(input = {}) {
 }
 
 export async function loadSettings() {
-    const stored = await storageService.getItem(storageKeys.settings, null);
+    const stored = await storageAdapter.getItem(storageKeys.settings, null);
     return normalizeSettings(stored || {});
 }
 
 export async function saveSettings(settings) {
     const normalized = normalizeSettings(settings);
-    await storageService.setItem(storageKeys.settings, normalized);
+    await storageAdapter.setItem(storageKeys.settings, normalized);
     return normalized;
 }
 
