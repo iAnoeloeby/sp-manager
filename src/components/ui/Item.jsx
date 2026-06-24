@@ -65,7 +65,7 @@ const Item = React.forwardRef(function Item(
 
 Item.displayName = "Item";
 
-function ItemAdd({ actions, ...props }) {
+function ItemAdd({ ...props }) {
     return (
         <Item
             variant="secondary"
