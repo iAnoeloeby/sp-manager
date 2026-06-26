@@ -6,8 +6,8 @@ import ShortcutDropdownMenu from "@/features/shortcuts/components/ShortcutDropdo
 import { ShortcutFormContent } from "@/features/shortcuts/components/ShortcutDialog";
 import WeatherWidget from "@/features/weatherWidget/widget/Weather";
 import ScoreboardWidget from "@/features/scoreboardWidget/widget/Scoreboard";
-import ActionWidget from "@/features/actionWidget/widget/ActionWidget";
-import ToolWidget from "@/features/toolWidget/widget/ToolWidget";
+import ActionWidget from "@/features/actionWidget/widget/Action";
+import ToolWidget from "@/features/toolWidget/widget/Tool";
 
 export const widgetRegistry = {
     [WIDGET_TYPES.SHORTCUT]: {
