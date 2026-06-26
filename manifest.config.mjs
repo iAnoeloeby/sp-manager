@@ -9,7 +9,10 @@ export default defineManifest({
     chrome_url_overrides: {
         newtab: "newtab.html",
     },
-    permissions: ["storage"],
+    background: {
+        service_worker: "src/services/developerService.js",
+    },
+    permissions: ["storage", "contextMenus"],
     icons: {
         16: "icons/icon-16.png",
         48: "icons/icon-48.png",
