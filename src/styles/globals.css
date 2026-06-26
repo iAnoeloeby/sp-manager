@@ -15,11 +15,11 @@
     --popover-foreground: oklch(0.145 0 0);
     --primary: oklch(0.205 0 0);
     --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
+    --secondary: oklch(0.95 0 0);
     --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
+    --muted: oklch(0.91 0 0);
     --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
+    --accent: oklch(0.91 0 0);
     --accent-foreground: oklch(0.205 0 0);
     --destructive: oklch(0.577 0.245 27.325);
     --border: oklch(0.922 0 0);
@@ -51,21 +51,15 @@
     --app-accent-foreground: var(--brand-accent-foreground);
     --app-radius: var(--radius);
     --page-background:
-        radial-gradient(
-            circle at top left,
+        radial-gradient(circle at top left,
             rgba(59, 130, 246, 0.16),
-            transparent 32%
-        ),
-        radial-gradient(
-            circle at top right,
+            transparent 32%),
+        radial-gradient(circle at top right,
             rgba(168, 85, 247, 0.12),
-            transparent 28%
-        ),
-        linear-gradient(
-            135deg,
+            transparent 28%),
+        linear-gradient(135deg,
             rgba(255, 255, 255, 0.98),
-            rgba(241, 245, 249, 0.94)
-        );
+            rgba(241, 245, 249, 0.94));
     color-scheme: light;
 }
 
@@ -113,25 +107,20 @@
     --app-accent-foreground: var(--brand-accent-foreground);
     --app-radius: var(--radius);
     --page-background:
-        radial-gradient(
-            circle at top left,
+        radial-gradient(circle at top left,
             rgba(59, 130, 246, 0.2),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at top right,
+            transparent 30%),
+        radial-gradient(circle at top right,
             rgba(99, 102, 241, 0.15),
-            transparent 26%
-        ),
+            transparent 26%),
         linear-gradient(180deg, rgba(2, 6, 23, 0.92), rgba(15, 23, 42, 0.98));
     color-scheme: dark;
 }
 
 @theme inline {
-    --font-sans: 'Manrope Variable', sans-serif;
+    --font-sans: "Manrope Variable", sans-serif;
     --font-clock:
-        "Monomaniac One", "Elms Sans", -apple-system, BlinkMacSystemFont,
-        sans-serif;
+        "Monomaniac One", "Elms Sans", -apple-system, BlinkMacSystemFont, sans-serif;
     --font-heading: var(--font-sans);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -174,14 +163,21 @@
 }
 
 @theme inline {
-    --color-background: var(--background);
-    --color-surface: var(--card);
-    --color-foreground: var(--foreground);
-    --color-muted: var(--muted-foreground);
-    --color-border: var(--border);
-    --color-accent: var(--brand-accent);
-    --color-accent-foreground: var(--brand-accent-foreground);
-    --radius-theme: var(--radius);
+    --color-background: var(--app-background);
+    --color-foreground: var(--app-foreground);
+
+    --color-surface: var(--app-surface);
+    --color-surface-foreground: var(--app-foreground);
+
+    --color-border: var(--app-border);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--app-muted);
+
+    --color-primary: var(--app-accent);
+    --color-primary-foreground: var(--app-accent-foreground);
+
+    --radius-lg: var(--app-radius);
 }
 
 html,
@@ -222,13 +218,17 @@ textarea::placeholder {
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground;
     }
+
     html {
         @apply font-sans;
     }
-  button:not(:disabled), [role="button"]:not(:disabled) {
-    cursor: pointer;
+
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        cursor: pointer;
     }
 }

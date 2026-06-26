@@ -71,7 +71,7 @@ export default function WidgetCell({
             <AnimatePresence>
                 {active && (
                     <motion.span
-                        className="absolute inset-0 h-full w-full bg-muted/15 block rounded-xl pointer-events-none z-1"
+                        className="absolute inset-0 h-full w-full bg-muted-foreground/10 block rounded-xl pointer-events-none z-1"
                         layoutId="hoverBackground"
                         initial={{ opacity: 0 }}
                         animate={{
